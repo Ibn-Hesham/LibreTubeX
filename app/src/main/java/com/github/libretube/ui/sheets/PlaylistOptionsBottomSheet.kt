@@ -3,6 +3,7 @@ package com.github.libretube.ui.sheets
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.github.libretube.R
 import com.github.libretube.api.MediaServiceRepository
@@ -21,6 +22,7 @@ import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.obj.ShareData
 import com.github.libretube.parcelable.PlayerData
 
+import com.github.libretube.repo.LocalUserDataRepository
 import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.activities.MainActivity
 import com.github.libretube.ui.base.BaseActivity
@@ -62,6 +64,10 @@ class PlaylistOptionsBottomSheet : BaseBottomSheet() {
             optionsList.add(R.string.export_playlist)
             optionsList.add(R.string.renamePlaylist)
             optionsList.add(R.string.change_playlist_description)
+            // the videos of local playlists can be reordered by dragging them around
+            if (UserDataRepositoryHelper.userDataRepository is LocalUserDataRepository) {
+                optionsList.add(R.string.reorder_playlist)
+            }
             optionsList.add(R.string.deletePlaylist)
         }
 
@@ -143,6 +149,13 @@ class PlaylistOptionsBottomSheet : BaseBottomSheet() {
                     IntentData.playlistDescription to ""
                 )
                 newPlaylistDescriptionDialog.show(mFragmentManager, null)
+            }
+
+            R.string.reorder_playlist -> {
+                setFragmentResult(
+                    PLAYLIST_OPTIONS_REQUEST_KEY,
+                    bundleOf(IntentData.playlistReorder to true)
+                )
             }
 
             R.string.download -> {

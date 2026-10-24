@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.github.libretube.R
 import com.github.libretube.api.MediaServiceRepository
@@ -43,6 +44,7 @@ import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.parcelable.PlayerData
 
+import com.github.libretube.repo.LocalUserDataRepository
 import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.adapters.PlaylistAdapter
 import com.github.libretube.ui.adapters.PlaylistItem
@@ -80,6 +82,12 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
 
     // whether the playlist is shown from the local cache, e.g. due to no internet
     private var showingCachedPlaylist = false
+
+    // whether the playlist is one of the user's local playlists, whose videos can
+    // be reordered by dragging them around
+    private var isLocalPlaylist = false
+    private var isReorderMode = false
+    private var reorderHandlerAttached = false
 
     // view models
     private val commonPlayerViewModel: CommonPlayerViewModel by activityViewModels()
@@ -264,6 +272,11 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
             // listener for swiping to the left or right
             if (playlistType != PlaylistType.PUBLIC) {
                 binding.playlistRecView.setOnDismissListener { position ->
+                    if (isReorderMode) {
+                        // removing videos is disabled while reordering
+                        playlistAdapter?.notifyItemChanged(position)
+                        return@setOnDismissListener
+                    }
                     removeFromPlaylist(position)
                 }
             }
@@ -295,6 +308,8 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                         resultBundle.getString(IntentData.playlistName)
                     val isPlaylistToBeDeleted =
                         resultBundle.getBoolean(IntentData.playlistTask)
+                    val isReorderRequested =
+                        resultBundle.getBoolean(IntentData.playlistReorder)
 
                     newPlaylistDescription?.let {
                         binding.playlistDescription.text = it
@@ -304,6 +319,10 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                     newPlaylistName?.let {
                         binding.playlistName.text = it
                         playlistName = it
+                    }
+
+                    if (isReorderRequested) {
+                        enterReorderMode()
                     }
 
                     if (isPlaylistToBeDeleted) {
@@ -346,17 +365,14 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                 }
             } else {
                 // private playlist, means shuffle is possible because all videos are received at once
-                if (playlistFeed.isEmpty()) {
-                    binding.bookmark.isGone = true
-                } else {
-                    binding.bookmark.setIconResource(R.drawable.ic_shuffle)
-                    binding.bookmark.text = getString(R.string.shuffle)
-                    binding.bookmark.setOnClickListener {
-                        val queue = playlistFeed.shuffled()
-                        PlayingQueue.setStreams(queue)
+                isLocalPlaylist =
+                    UserDataRepositoryHelper.userDataRepository is LocalUserDataRepository
 
-                        navigateVideo(queue.firstOrNull() ?: return@setOnClickListener)
-                    }
+                setShuffleButton()
+
+                if (isLocalPlaylist && !reorderHandlerAttached) {
+                    reorderHandlerAttached = true
+                    attachPlaylistReorderHandler()
                 }
 
                 if (playlistFeed.isEmpty()) {
@@ -399,6 +415,8 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
 
     private fun startVideoItemPlayback(streamItem: StreamItem) {
         if (playlistFeed.isEmpty()) return
+        // don't navigate to the player while the playlist videos are being reordered
+        if (isReorderMode) return
 
         // without an internet connection, only the downloaded videos can be played
         val videoId = streamItem.url?.toID()
@@ -462,6 +480,143 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                 // bookmarked, but not cached yet, e.g. because it was bookmarked on an other device
                 PlaylistCacheHelper.updateCache(playlistId, playlist)
             }
+        }
+    }
+
+    private fun setShuffleButton() {
+        if (playlistFeed.isEmpty()) {
+            binding.bookmark.isGone = true
+            return
+        }
+        binding.bookmark.isVisible = true
+        binding.bookmark.setIconResource(R.drawable.ic_shuffle)
+        binding.bookmark.text = getString(R.string.shuffle)
+        binding.bookmark.setOnClickListener {
+            val queue = playlistFeed.shuffled()
+            PlayingQueue.setStreams(queue)
+
+            navigateVideo(queue.firstOrNull() ?: return@setOnClickListener)
+        }
+    }
+
+    /**
+     * Let the videos of the local playlist be reordered by dragging them around.
+     * Long pressing videos normally opens their options, thus the drag support is
+     * only active while the reorder mode is enabled.
+     */
+    private fun attachPlaylistReorderHandler() {
+        val dragCallback = object : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                return if (isReorderMode) {
+                    makeFlag(
+                        ItemTouchHelper.ACTION_STATE_DRAG,
+                        ItemTouchHelper.UP or ItemTouchHelper.DOWN or
+                            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                    )
+                } else {
+                    0
+                }
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                if (!isReorderMode) return false
+                val adapter = playlistAdapter ?: return false
+                val from = viewHolder.absoluteAdapterPosition
+                val to = target.absoluteAdapterPosition
+                if (from == RecyclerView.NO_POSITION || to == RecyclerView.NO_POSITION) return false
+                // reordering is only supported for the full, unfiltered playlist
+                if (adapter.currentList.size != playlistFeed.size) return false
+
+                adapter.moveItem(from, to)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                // the video got dropped, persist the new order of the playlist
+                val adapter = playlistAdapter ?: return
+                if (isReorderMode) persistPlaylistOrder(adapter.currentList)
+            }
+        }
+        ItemTouchHelper(dragCallback).attachToRecyclerView(binding.playlistRecView)
+    }
+
+    private fun enterReorderMode() {
+        if (!isLocalPlaylist || playlistFeed.isEmpty() || isReorderMode) return
+
+        isReorderMode = true
+        // long pressing a video now starts dragging it instead of opening its options
+        playlistAdapter?.longClicksEnabled = false
+        // reordering applies to the natural playlist order, not to a sorted or filtered view
+        if (selectedSortOrder != 0) {
+            selectedSortOrder = 0
+            binding.sortBTN.text = sortOptions[selectedSortOrder]
+        }
+        playlistViewModel.setQuery(null)
+        binding.sortBTN.isGone = true
+
+        binding.bookmark.isVisible = true
+        binding.bookmark.setIconResource(R.drawable.ic_done)
+        binding.bookmark.text = getString(R.string.done)
+        binding.bookmark.setOnClickListener { exitReorderMode() }
+
+        showPlaylistVideos()
+    }
+
+    private fun exitReorderMode() {
+        if (!isReorderMode) return
+
+        isReorderMode = false
+        playlistAdapter?.longClicksEnabled = true
+        binding.sortBTN.isVisible = playlistFeed.isNotEmpty()
+        setShuffleButton()
+
+        showPlaylistVideos()
+    }
+
+    /**
+     * Store the new order of the local playlist after its videos got dragged around.
+     */
+    private fun persistPlaylistOrder(videos: List<PlaylistItem>) {
+        if (videos.size != playlistFeed.size) return
+
+        playlistFeed = videos.map { it.item }.toMutableList()
+        // refreshes the adapter list, e.g. with the updated original item indices
+        showPlaylistVideos()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val dao = Database.localPlaylistsDao()
+            val playlistItems = dao.getPlaylistVideos(playlistId)
+            val itemsByVideoId = playlistItems.associateBy { it.videoId }
+            val reorderedItems = playlistFeed.mapNotNull { streamItem ->
+                itemsByVideoId[streamItem.url?.toID()]
+            }
+            if (reorderedItems.size != playlistItems.size) return@launch
+
+            dao.reorderPlaylistVideos(playlistId, reorderedItems)
+
+            // keep the playlist thumbnail in sync with the new first video
+            dao.getAll().firstOrNull { it.playlist.id.toString() == playlistId }
+                ?.playlist?.let { playlist ->
+                    reorderedItems.firstOrNull()?.thumbnailUrl?.let { newThumbnail ->
+                        if (playlist.thumbnailUrl != newThumbnail) {
+                            playlist.thumbnailUrl = newThumbnail
+                            dao.updatePlaylist(playlist)
+                        }
+                    }
+                }
         }
     }
 

@@ -43,4 +43,18 @@ interface LocalPlaylistsDao {
     @Query("SELECT * FROM localPlaylistItem WHERE playlistId = :playlistId AND videoId = :videoId LIMIT 1")
     suspend fun getPlaylistVideo(playlistId: String, videoId: String): LocalPlaylistItem?
 
+    @Query("SELECT * FROM localPlaylistItem WHERE playlistId = :playlistId")
+    suspend fun getPlaylistVideos(playlistId: String): List<LocalPlaylistItem>
+
+    /**
+     * Store the videos of the playlist in the given order. As the display order of a
+     * local playlist is the insertion order of its rows, the items are deleted and
+     * re-inserted with fresh ids in the new order.
+     */
+    @Transaction
+    suspend fun reorderPlaylistVideos(playlistId: String, videos: List<LocalPlaylistItem>) {
+        deletePlaylistItemsByPlaylistId(playlistId)
+        videos.forEach { addPlaylistVideo(it.copy(id = 0)) }
+    }
+
 }

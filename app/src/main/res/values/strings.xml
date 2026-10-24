@@ -169,6 +169,8 @@
     <string name="download_paused">Download paused</string>
     <string name="download_completed">Download completed</string>
     <string name="video_not_downloaded_offline">This video isn\'t downloaded and thus can\'t be played offline.</string>
+    <string name="reorder_playlist">Reorder videos</string>
+    <string name="done">Done</string>
     <string name="concurrent_downloads_limit_reached">Max concurrent downloads limit reached.</string>
     <string name="unknown">Unknown</string>
     <string name="pause">Pause</string>

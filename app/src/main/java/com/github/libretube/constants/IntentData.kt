@@ -31,6 +31,7 @@ object IntentData {
     const val appUpdateURL = "updateURL"
     const val backupFile = "backupFile"
     const val playlistTask = "playlistTask"
+    const val playlistReorder = "playlistReorder"
     const val loginTask = "loginTask"
     const val logoutTask = "logoutTask"
     const val color = "color"
