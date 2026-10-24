@@ -34,7 +34,9 @@ android {
         applicationId = "com.github.libretubex"
         minSdk = 26
         targetSdk = 36
-        versionCode = 72
+        // overridable via the VERSION_CODE env var, e.g. by CI, to get
+        // ever-increasing build numbers for the rolling release
+        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 72
         versionName = "32.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resValue("string", "app_name", "LibreTubeX")
