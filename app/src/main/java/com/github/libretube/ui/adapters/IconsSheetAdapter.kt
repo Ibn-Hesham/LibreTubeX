@@ -41,6 +41,9 @@ class IconsSheetAdapter : RecyclerView.Adapter<IconsSheetViewHolder>() {
             object Default :
                 AppIcon(R.string.defaultIcon, R.mipmap.ic_launcher, "Default")
 
+            object Classic :
+                AppIcon(R.string.classicIcon, R.mipmap.ic_classic, "IconClassic")
+
             object DefaultLight :
                 AppIcon(R.string.defaultIconLight, R.mipmap.ic_launcher_light, "DefaultLight")
 
@@ -57,6 +60,7 @@ class IconsSheetAdapter : RecyclerView.Adapter<IconsSheetViewHolder>() {
 
         val availableIcons = listOf(
             AppIcon.Default,
+            AppIcon.Classic,
             AppIcon.DefaultLight,
             AppIcon.Legacy,
             AppIcon.Gradient,

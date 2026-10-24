@@ -324,6 +324,26 @@
 
         </activity-alias>
 
+        <activity-alias
+            android:name=".IconClassic"
+            android:configChanges="keyboard|keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation|uiMode"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_classic"
+            android:roundIcon="@mipmap/ic_classic_round"
+            android:supportsPictureInPicture="true"
+            android:targetActivity=".ui.activities.MainActivity"
+            android:theme="@style/SplashScreenTheme"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
+        </activity-alias>
+
         <activity
             android:name=".ui.activities.RouterActivity"
             android:exported="true"

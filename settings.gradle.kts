@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LibreTube"
+rootProject.name = "LibreTubeX"
 
 include(":app")
 include(":baselineprofile")
