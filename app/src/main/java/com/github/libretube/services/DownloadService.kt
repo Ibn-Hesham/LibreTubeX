@@ -296,6 +296,7 @@ class DownloadService : LifecycleService() {
         val sink = item.path.sink(StandardOpenOption.APPEND).buffer()
         var totalRead = item.path.fileSize()
         var numberOfTries = 0
+        var isCompleted = false
         while (downloadQueue[item.id] && !item.isFinished) {
             try {
                 when (val result = downloadProvider.downloadNextChunk(item, sink)) {
@@ -303,6 +304,7 @@ class DownloadService : LifecycleService() {
                         setPauseNotification(notificationBuilder, item, true)
                         _downloadFlow.emit(item.id to DownloadStatus.Completed)
                         downloadQueue[item.id] = false
+                        isCompleted = true
                         break
                     }
                     DownloadProgressResult.Failed -> {
@@ -311,7 +313,6 @@ class DownloadService : LifecycleService() {
                             delay(200)
                             numberOfTries++
                         } else {
-                            setPauseNotification(notificationBuilder, item, false)
                             pause(item.id)
                             break
                         }
@@ -347,8 +348,14 @@ class DownloadService : LifecycleService() {
         // start the next download if there are any remaining ones enqueued
         startNextEnqueueDownload()
 
-        // explicitly send a pause event if the user paused the download, although it's not yet finished
-        if (!item.isFinished) pause(item.id)
+        // show the paused notification with the resume action and send a pause event
+        // if the download is not finished, e.g. because the user paused it
+        if (!item.isFinished) {
+            if (!isCompleted) {
+                setPauseNotification(notificationBuilder, item, false)
+            }
+            pause(item.id)
+        }
 
         // if no new download was enqueued (i.e. there's no paused/stopped download left),
         // look if any downloads are still running, and if not, stop the service
