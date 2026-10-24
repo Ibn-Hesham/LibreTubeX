@@ -75,6 +75,7 @@ import okio.sink
 import java.net.HttpURLConnection
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
+import java.util.Locale
 import java.util.concurrent.Executors
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.io.path.createFile
@@ -549,20 +550,51 @@ class DownloadService : LifecycleService() {
         )
     }
 
-    private fun getNotificationBuilder(item: DownloadItem): Builder {
+    private suspend fun getNotificationBuilder(item: DownloadItem): Builder {
         val intent = Intent(this@DownloadService, MainActivity::class.java)
             .putExtra(IntentData.OPEN_DOWNLOADS, true)
         val activityIntent = PendingIntentCompat
             .getActivity(this@DownloadService, 0, intent, FLAG_CANCEL_CURRENT, false)
 
+        val (title, subText) = getNotificationTexts(item)
+
         return Builder(this, DOWNLOAD_CHANNEL_NAME)
-            .setContentTitle("[${item.type}] ${item.fileName}")
+            .setContentTitle(title)
+            .apply { subText?.let(::setSubText) }
             .setProgress(0, 0, true)
             .setOngoing(true)
             .setContentIntent(activityIntent)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setGroup(DOWNLOAD_NOTIFICATION_GROUP)
+    }
+
+    /**
+     * Title and subtext for a download notification. The title is prefixed with the file
+     * type so that the audio, video and subtitle items of the same video, which download
+     * as separate notifications, stay distinguishable.
+     */
+    private suspend fun getNotificationTexts(item: DownloadItem): Pair<String, String?> {
+        val typeLabel = when (item.type) {
+            FileType.AUDIO -> getString(R.string.audio)
+            FileType.VIDEO -> getString(R.string.video)
+            FileType.SUBTITLE -> getString(R.string.captions)
+        }
+
+        // the streams info is already loaded at this point in most cases, otherwise
+        // fall back to the metadata stored when the download was first enqueued
+        val (title, uploader) = cachedStreamsInfo[item.videoId]?.let { streams ->
+            streams.title to streams.uploader
+        } ?: runCatching { Database.downloadDao().findById(item.videoId) }.getOrNull()?.download?.let {
+            it.title.ifBlank { item.fileName } to it.uploader
+        } ?: (item.fileName to null)
+
+        val subText = listOfNotNull(
+            uploader?.takeIf { it.isNotBlank() },
+            item.language?.let { Locale.forLanguageTag(it).displayLanguage }
+        ).joinToString(" · ").ifEmpty { null }
+
+        return "[$typeLabel] $title" to subText
     }
 
     private fun setResumeNotification(
