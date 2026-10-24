@@ -7,7 +7,7 @@ For everything about the original app — releases, translations, community — 
 ## Download
 
 [<img src="https://img.shields.io/badge/GitHub-Releases-181717?style=for-the-badge&logo=github" alt="Get it from GitHub releases">](https://github.com/Ibn-Hesham/LibreTubeX/releases/latest)
-[<img src="https://custom-icon-badges.com/badge/Obtainium-Add_App-7B52AB?style=for-the-badge&logo=obtainium" alt="Add to Obtainium">](obtainium://add/https://github.com/Ibn-Hesham/LibreTubeX/releases)
+[<img src="https://img.shields.io/badge/Obtainium-Add_App-7B52AB?style=for-the-badge&logo=obtainium" alt="Add to Obtainium">](obtainium://add/https://github.com/Ibn-Hesham/LibreTubeX/releases)
 
 There is one rolling release that gets replaced with a fresh build on every update — the latest build is always the one to get.
 
