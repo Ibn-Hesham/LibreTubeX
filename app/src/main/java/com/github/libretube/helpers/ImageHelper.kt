@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.storage.StorageManager
 import android.widget.ImageView
 import androidx.core.content.getSystemService
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import coil3.ImageLoader
 import coil3.disk.DiskCache
@@ -27,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.File
 import java.nio.file.Path
 
 object ImageHelper {
@@ -34,6 +36,7 @@ object ImageHelper {
 
     private val Context.coilFile get() = cacheDir.resolve("coil")
     private const val HTTP_SCHEME = "http"
+    private val VIDEO_ID_REGEX = Regex("[A-Za-z0-9_-]{11}")
 
     /**
      * Initialize the image loader
@@ -86,20 +89,47 @@ object ImageHelper {
     }
 
     /**
+     * Resolves the url to load an image from. Falls back to the online thumbnail if
+     * the url points to the locally stored thumbnail of a download that no longer
+     * exists, e.g. referenced by watch history entries of deleted downloads.
+     */
+    private fun resolveImageUrl(url: String): String {
+        val localFile = when {
+            url.startsWith("file:") ->
+                runCatching { url.toUri().toFile() }.getOrNull()
+
+            url.startsWith("/") -> File(url)
+            else -> null
+        } ?: return url
+
+        if (localFile.exists()) return url
+
+        // downloaded thumbnails are stored as thumbnail/<videoId>, so the online
+        // thumbnail can be restored from the file name alone
+        val videoId = localFile.name
+        return if (VIDEO_ID_REGEX.matches(videoId)) {
+            "https://i.ytimg.com/vi/$videoId/hqdefault.jpg"
+        } else {
+            url
+        }
+    }
+
+    /**
      * load an image from a url into an imageView
      */
     fun loadImage(url: String?, target: ImageView, whiteBackground: Boolean = false) {
         if (url.isNullOrEmpty()) return
+        val imageUrl = resolveImageUrl(url)
 
         // clear image to avoid loading issues at fast scrolling
         target.setImageBitmap(null)
 
         // only load online images if the data saver mode is disabled
         if (DataSaverMode.isEnabled(target.context)) {
-            if (url.startsWith(HTTP_SCHEME) && !isCached(url)) return
+            if (imageUrl.startsWith(HTTP_SCHEME) && !isCached(imageUrl)) return
         }
 
-        target.load(url) {
+        target.load(imageUrl) {
             listener(
                 onSuccess = { _, _ ->
                     // set the background to white for transparent images
