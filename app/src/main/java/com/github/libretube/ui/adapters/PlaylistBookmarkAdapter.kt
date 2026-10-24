@@ -13,6 +13,7 @@ import com.github.libretube.db.obj.PlaylistBookmark
 import com.github.libretube.enums.PlaylistType
 import com.github.libretube.helpers.ImageHelper
 import com.github.libretube.helpers.NavigationHelper
+import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.adapters.callbacks.DiffUtilItemCallback
 import com.github.libretube.ui.base.BaseActivity
@@ -67,6 +68,7 @@ class PlaylistBookmarkAdapter: ListAdapter<PlaylistBookmark, PlaylistBookmarkVie
                     if (!isBookmarked) {
                         UserDataRepositoryHelper.userDataRepository
                             .deletePlaylistBookmark(bookmark.playlistId)
+                        PlaylistCacheHelper.deleteCache(bookmark.playlistId)
                     } else {
                         UserDataRepositoryHelper.userDataRepository
                             .createPlaylistBookmark(bookmark)

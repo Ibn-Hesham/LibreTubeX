@@ -17,6 +17,7 @@ import com.github.libretube.extensions.toastFromMainDispatcher
 import com.github.libretube.helpers.BackgroundHelper
 import com.github.libretube.helpers.ContextHelper
 import com.github.libretube.helpers.DownloadHelper
+import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.obj.ShareData
 import com.github.libretube.parcelable.PlayerData
 
@@ -179,11 +180,16 @@ class PlaylistOptionsBottomSheet : BaseBottomSheet() {
                         UserDataRepositoryHelper.userDataRepository.deletePlaylistBookmark(
                             playlistId
                         )
+                        PlaylistCacheHelper.deleteCache(playlistId)
                     } else {
-                        val bookmark = runCatching {
+                        val playlist = runCatching {
                             MediaServiceRepository.instance.getPlaylist(playlistId)
-                        }.getOrElse { return@withContext }.toPlaylistBookmark(playlistId)
-                        UserDataRepositoryHelper.userDataRepository.createPlaylistBookmark(bookmark)
+                        }.getOrElse { return@withContext }
+                        UserDataRepositoryHelper.userDataRepository.createPlaylistBookmark(
+                            playlist.toPlaylistBookmark(playlistId)
+                        )
+                        // cache the playlist, so that it can be opened when offline
+                        PlaylistCacheHelper.updateCache(playlistId, playlist)
                     }
                 }
             }

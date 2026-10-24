@@ -27,7 +27,8 @@ import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.databinding.FragmentPlaylistBinding
-import com.github.libretube.db.DatabaseHolder
+import com.github.libretube.db.DatabaseHolder.Database
+import com.github.libretube.db.obj.toPlaylistCacheItem
 import com.github.libretube.enums.PlaylistType
 import com.github.libretube.extensions.TAG
 import com.github.libretube.extensions.ceilHalf
@@ -37,6 +38,8 @@ import com.github.libretube.extensions.toID
 import com.github.libretube.extensions.toastFromMainDispatcher
 import com.github.libretube.helpers.ImageHelper
 import com.github.libretube.helpers.NavigationHelper
+import com.github.libretube.helpers.NetworkHelper
+import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.parcelable.PlayerData
 
@@ -75,6 +78,9 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
     private var isLoading = true
     private var isBookmarked = false
 
+    // whether the playlist is shown from the local cache, e.g. due to no internet
+    private var showingCachedPlaylist = false
+
     // view models
     private val commonPlayerViewModel: CommonPlayerViewModel by activityViewModels()
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
@@ -103,8 +109,11 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
         binding.playlistProgress.isVisible = true
 
         lifecycleScope.launch(Dispatchers.IO) {
-            isBookmarked =
+            // if the request fails, e.g. due to no internet connection, treat the
+            // playlist as not bookmarked instead of crashing
+            isBookmarked = runCatching {
                 UserDataRepositoryHelper.userDataRepository.getPlaylistBookmark(playlistId) != null
+            }.getOrDefault(false)
 
             withContext(Dispatchers.Main) {
                 updateBookmarkRes()
@@ -145,10 +154,62 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                 }
             } catch (e: Exception) {
                 Log.e(TAG(), e.toString())
+
+                // if the playlist couldn't be fetched, e.g. due to no internet connection,
+                // fall back to the locally cached copy of the bookmarked playlist
+                val cachedPlaylist = withContext(Dispatchers.IO) { loadCachedPlaylist() }
+                val binding = _binding ?: return@launch
+                binding.playlistProgress.isGone = true
+                if (cachedPlaylist == null) {
+                    binding.nothingHere.isVisible = true
+                    return@launch
+                }
+                showPlaylist(cachedPlaylist, fromCache = true)
                 return@launch
             }
+            showPlaylist(response, fromCache = false)
+        }
+    }
+
+    /**
+     * Load the locally cached copy of the playlist, if there is one. Thumbnails of
+     * downloaded videos and of a downloaded playlist are preferred over the online
+     * ones, as the latter can't be loaded without an internet connection.
+     */
+    private suspend fun loadCachedPlaylist(): Playlist? {
+        val cacheWithItems = Database.playlistCacheDao().getCacheWithItems(playlistId)
+            ?: return null
+        val playlist = cacheWithItems.toPlaylist()
+
+        val videoIds = playlist.relatedStreams.mapNotNull { it.url?.toID() }
+        val downloads = Database.downloadDao().getDownloadsByIds(videoIds)
+            .associateBy { it.videoId }
+        playlist.relatedStreams = playlist.relatedStreams.map { streamItem ->
+            downloads[streamItem.url?.toID()]
+                ?.thumbnailPath
+                ?.let { streamItem.copy(thumbnail = it.toUri().toString()) }
+                ?: streamItem
+        }
+
+        // if the playlist is downloaded as a playlist, use its locally stored cover
+        val hasPlaylistDownload = Database.downloadDao()
+            .getVideoIdsFromPlaylist(playlistId).isNotEmpty()
+        if (hasPlaylistDownload) {
+            val playlistDownload = runCatching {
+                Database.downloadDao().getDownloadPlaylistById(playlistId)
+            }.getOrNull()?.downloadPlaylist
+            playlistDownload?.thumbnailPath?.let { localCover ->
+                return playlist.copy(thumbnailUrl = localCover.toUri().toString())
+            }
+        }
+        return playlist
+    }
+
+    private fun showPlaylist(response: Playlist, fromCache: Boolean) {
+        lifecycleScope.launch {
             val binding = _binding ?: return@launch
 
+            showingCachedPlaylist = fromCache
             playlistFeed = response.relatedStreams.toMutableList()
             nextPage = response.nextpage
             playlistName = response.name
@@ -268,14 +329,19 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                     isBookmarked = !isBookmarked
                     updateBookmarkRes()
                     lifecycleScope.launch(Dispatchers.IO) {
-                        if (!isBookmarked) {
-                            UserDataRepositoryHelper.userDataRepository
-                                .deletePlaylistBookmark(playlistId)
-                        } else {
-                            val bookmark = response.toPlaylistBookmark(playlistId)
-                            UserDataRepositoryHelper.userDataRepository
-                                .createPlaylistBookmark(bookmark)
-                        }
+                        runCatching {
+                            if (!isBookmarked) {
+                                UserDataRepositoryHelper.userDataRepository
+                                    .deletePlaylistBookmark(playlistId)
+                                PlaylistCacheHelper.deleteCache(playlistId)
+                            } else {
+                                val bookmark = response.toPlaylistBookmark(playlistId)
+                                UserDataRepositoryHelper.userDataRepository
+                                    .createPlaylistBookmark(bookmark)
+                                // cache the playlist, so that it can be opened when offline
+                                PlaylistCacheHelper.updateCache(playlistId, response)
+                            }
+                        }.onFailure { Log.e(TAG(), it.toString()) }
                     }
                 }
             } else {
@@ -312,7 +378,11 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
 
             }
 
-            updatePlaylistBookmark(response)
+            // don't try to update the bookmark or the cache when showing the cached
+            // playlist, e.g. because there is no internet connection
+            if (!showingCachedPlaylist) {
+                updatePlaylistBookmark(response)
+            }
         }
     }
 
@@ -330,10 +400,44 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
     private fun startVideoItemPlayback(streamItem: StreamItem) {
         if (playlistFeed.isEmpty()) return
 
+        // without an internet connection, only the downloaded videos can be played
+        val videoId = streamItem.url?.toID()
+        if (videoId != null && !NetworkHelper.isNetworkAvailable(requireContext())) {
+            playDownloadedVersion(videoId)
+            return
+        }
+
         val sortedStreams = getSortedVideos()
         PlayingQueue.setStreams(sortedStreams.map { it.item })
 
         navigateVideo(streamItem)
+    }
+
+    /**
+     * Play the downloaded version of the video offline, using the downloads of this
+     * playlist as the playing queue if there are any.
+     */
+    private fun playDownloadedVersion(videoId: String) {
+        lifecycleScope.launch {
+            val (videoDownloaded, playlistDownloaded) = withContext(Dispatchers.IO) {
+                Database.downloadDao().exists(videoId) to
+                    Database.downloadDao().getVideoIdsFromPlaylist(playlistId).isNotEmpty()
+            }
+            if (!videoDownloaded) {
+                context?.toastFromMainDispatcher(R.string.video_not_downloaded_offline)
+                return@launch
+            }
+
+            NavigationHelper.navigateVideo(
+                requireContext(),
+                PlayerData(
+                    videoId = videoId,
+                    playlistId = playlistId.takeIf { playlistDownloaded },
+                    downloadTab = if (playlistDownloaded) DownloadTab.PLAYLIST else DownloadTab.VIDEO,
+                    isOffline = true
+                )
+            )
+        }
     }
 
     /**
@@ -352,6 +456,11 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
             ) {
                 val bookmark = playlist.toPlaylistBookmark(playlistBookmark.playlistId)
                 UserDataRepositoryHelper.userDataRepository.createPlaylistBookmark(bookmark)
+                // the content of the playlist changed, refresh the offline cache
+                PlaylistCacheHelper.updateCache(playlistId, playlist)
+            } else if (Database.playlistCacheDao().getCache(playlistId) == null) {
+                // bookmarked, but not cached yet, e.g. because it was bookmarked on an other device
+                PlaylistCacheHelper.updateCache(playlistId, playlist)
             }
         }
     }
@@ -534,6 +643,18 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
             playlistAdapter?.submitList(newList)
             updatePlaylistDuration(newList)
             isLoading = false
+
+            // if the playlist is bookmarked, extend the offline cache by the new page
+            if (isBookmarked && response.relatedStreams.isNotEmpty()) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val positionOffset = Database.playlistCacheDao().getItemCount(playlistId)
+                    Database.playlistCacheDao().insertItems(
+                        response.relatedStreams.mapIndexed { index, item ->
+                            item.toPlaylistCacheItem(playlistId, positionOffset + index)
+                        }
+                    )
+                }
+            }
         }
     }
 

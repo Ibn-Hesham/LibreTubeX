@@ -9,6 +9,7 @@ import com.github.libretube.db.dao.DownloadDao
 import com.github.libretube.db.dao.LocalPlaylistsDao
 import com.github.libretube.db.dao.LocalSubscriptionDao
 import com.github.libretube.db.dao.PlaylistBookmarkDao
+import com.github.libretube.db.dao.PlaylistCacheDao
 import com.github.libretube.db.dao.SearchHistoryDao
 import com.github.libretube.db.dao.SubscriptionGroupsDao
 import com.github.libretube.db.dao.SubscriptionsFeedDao
@@ -25,6 +26,8 @@ import com.github.libretube.db.obj.LocalPlaylist
 import com.github.libretube.db.obj.LocalPlaylistItem
 import com.github.libretube.db.obj.LocalSubscription
 import com.github.libretube.db.obj.PlaylistBookmark
+import com.github.libretube.db.obj.PlaylistCache
+import com.github.libretube.db.obj.PlaylistCacheItem
 import com.github.libretube.db.obj.SearchHistoryItem
 import com.github.libretube.db.obj.SubscriptionGroup
 import com.github.libretube.db.obj.SubscriptionsFeedItem
@@ -39,6 +42,8 @@ import com.github.libretube.db.obj.WatchPosition
         CustomInstance::class,
         LocalSubscription::class,
         PlaylistBookmark::class,
+        PlaylistCache::class,
+        PlaylistCacheItem::class,
         LocalPlaylist::class,
         LocalPlaylistItem::class,
         Download::class,
@@ -50,7 +55,7 @@ import com.github.libretube.db.obj.WatchPosition
         SubscriptionGroup::class,
         SubscriptionsFeedItem::class
     ],
-    version = 25,
+    version = 26,
     autoMigrations = [
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
@@ -62,6 +67,7 @@ import com.github.libretube.db.obj.WatchPosition
         AutoMigration(from = 20, to = 21),
         AutoMigration(from = 23, to = 24, spec = DatabaseHolder.MIGRATION_23_24::class),
         AutoMigration(from = 24, to = 25),
+        AutoMigration(from = 25, to = 26),
     ]
 )
 @TypeConverters(Converters::class)
@@ -95,6 +101,11 @@ abstract class AppDatabase : RoomDatabase() {
      * Bookmarked Playlists
      */
     abstract fun playlistBookmarkDao(): PlaylistBookmarkDao
+
+    /**
+     * Locally cached (bookmarked) playlists for offline access
+     */
+    abstract fun playlistCacheDao(): PlaylistCacheDao
 
     /**
      * Local playlists
