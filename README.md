@@ -7,7 +7,7 @@ For everything about the original app — releases, translations, community — 
 ## Download
 
 [<img src="https://img.shields.io/badge/GitHub-Releases-181717?style=for-the-badge&logo=github" alt="Get it from GitHub releases">](https://github.com/Ibn-Hesham/LibreTubeX/releases/latest)
-[<img src="assets/badge_obtainium.png" alt="Add to Obtainium" height="48">](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2520%2522com.github.libretubex%2522%252C%2520%2522url%2522%253A%2520%2522https%253A%2522%252F%252Fgithub.com%252FIbn-Hesham%252FLibreTubeX%252Freleases%2522%252C%2520%2522author%2522%253A%2520%2522Ibn-Hesham%2522%252C%2520%2522name%2522%253A%2520%2522LibreTubeX%2522%257D)
+[<img src="https://img.shields.io/badge/Obtainium-Add_App-7B52AB?style=for-the-badge&logo=obtainium" alt="Add to Obtainium">](https://apps.obtainium.imranr.dev/redirect?r=obtainium%3A%2F%2Fapp%2F%257B%2522id%2522%253A%2520%2522com.github.libretubex%2522%252C%2520%2522url%2522%253A%2520%2522https%253A%252F%252Fgithub.com%252FIbn-Hesham%252FLibreTubeX%2522%252C%2520%2522author%2522%253A%2520%2522Ibn-Hesham%2522%252C%2520%2522name%2522%253A%2520%2522LibreTubeX%2522%257D)
 
 There is one rolling release that gets replaced with a fresh build on every update — the latest build is always the one to get.
 
