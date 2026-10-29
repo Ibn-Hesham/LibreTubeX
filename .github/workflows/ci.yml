@@ -15,6 +15,12 @@ on:
       - "assets/**"
       - ".github/**/*.md"
 
+# a new push cancels any run still in flight for the same branch, so an
+# older run can never finish last and steal the release "latest" flag
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   debug-builds:
     runs-on: ubuntu-latest
@@ -54,7 +60,7 @@ jobs:
           name: app
           path: app/build/outputs/apk/debug/app-debug-signed.apk
 
-  release-nightly:
+  release:
     if: github.ref_name == 'main'
     permissions:
       contents: write
@@ -71,7 +77,9 @@ jobs:
           cache: "gradle"
 
       - name: Compute version code
-        run: echo "VERSION_CODE=$(( 72 + ${{ github.run_number }} ))" >> $GITHUB_ENV
+        run: |
+          echo "VERSION_CODE=$(( 72 + ${{ github.run_number }} ))" >> $GITHUB_ENV
+          echo "VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)" >> $GITHUB_ENV
 
       - name: Build release APK
         run: ./gradlew assembleRelease --no-daemon
@@ -94,18 +102,33 @@ jobs:
           echo "TIME=$(date -u +'%T')" >> $GITHUB_ENV
           echo "DATE=$(date -u +'%d-%m-%Y')" >> $GITHUB_ENV
 
-      - name: Create Nightly Tag
-        run: git tag -f nightly && git push -f origin nightly
-
-      - name: Create Nightly Release
-        if: github.ref == 'refs/heads/main'
+      # each run gets its own release, so previous APKs stay available for
+      # downgrades; releases/latest follows the makeLatest flag, not dates
+      - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ github.token }}
-          tag:  nightly
+          tag: v${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}
           makeLatest: true
-          allowUpdates: true
           artifacts: libretubex.apk
-          name: LibreTubeX ${{ env.DATE }}
+          name: LibreTubeX v${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}
           body: |
-            Automatic release build from ${{ env.DATE }} ${{ env.TIME }} (commit ${{ github.sha }})
+            Automatic release build from ${{ env.DATE }} ${{ env.TIME }} UTC (commit ${{ github.sha }})
+
+            Version code ${{ env.VERSION_CODE }} — matches the version shown in the app under Settings → About.
+
+      # keep the 10 newest per-build releases; manually tagged releases
+      # (two-part tags, e.g. v33.0) are never pruned. Releases created with
+      # GITHUB_TOKEN cannot trigger other workflows, so this never re-fires CI
+      - name: Remove old releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | test("^v[0-9]+\\.[0-9]+\\.[0-9]+$"))] | sort_by(.createdAt) | reverse | .[10:] | .[].tagName' \
+            | while read -r tag; do
+                echo "deleting old build release $tag"
+                gh release delete "$tag" --yes --cleanup-tag
+              done
+          # remove the legacy rolling release from before per-build releases
+          gh release delete nightly --yes --cleanup-tag || true
