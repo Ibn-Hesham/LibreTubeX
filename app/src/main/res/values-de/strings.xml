@@ -317,7 +317,7 @@
     <string name="alternative_pip_controls_summary">Buttons für \"Nur Audio\" und \"Überspringen\" im Bild-im-Bild-Modus anzeigen anstelle von Vor- und Zurückspulen</string>
     <string name="replies">Antworten</string>
     <string name="concurrent_downloads_limit_reached">Maximal Anzahl von Downloads erreicht.</string>
-    <string name="audio_only_mode_summary">LibreTube in einen Musikplayer umwandeln</string>
+    <string name="audio_only_mode_summary">LibreTubeX in einen Musikplayer umwandeln</string>
     <string name="faq">Häufig gestellte Fragen</string>
     <string name="help">Hilfe</string>
     <string name="sleep_timer">Einschlaf-Timer</string>
@@ -471,7 +471,7 @@
     <string name="title">Titel</string>
     <string name="import_temp_playlist">Temporäre Playlist importieren?</string>
     <string name="external_download_provider">Externe Download-App</string>
-    <string name="external_download_provider_summary">Gib den Paketnamen der App ein, die zum Herunterladen von Videos verwendet werden soll. Nichts eintragen, um den eingebauten Downloader von LibreTube zu verwenden.</string>
+    <string name="external_download_provider_summary">Gib den Paketnamen der App ein, die zum Herunterladen von Videos verwendet werden soll. Nichts eintragen, um den eingebauten Downloader von LibreTubeX zu verwenden.</string>
     <string name="screenshot">Screenshot</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Direkter Abruf von Videos</string>
@@ -550,7 +550,7 @@
     <string name="export">Exportieren</string>
     <string name="missing_auth_falling_back">Nicht angemeldet. Datensynchronisation ausgeschaltet.</string>
     <string name="oidc_login">Mit OIDC fortfahren</string>
-    <string name="welcome">Willkommen bei LibreTube! Um loszulegen, wählen Sie bitte unten einen Synchronisierungsmodus aus, um zu entscheiden, ob Sie Ihre Benutzerdaten geräteübergreifend synchronisieren möchten.</string>
+    <string name="welcome">Willkommen bei LibreTubeX! Um loszulegen, wählen Sie bitte unten einen Synchronisierungsmodus aus, um zu entscheiden, ob Sie Ihre Benutzerdaten geräteübergreifend synchronisieren möchten.</string>
     <string name="choose_instance">Bitte wählen Sie zunächst eine Instanz aus!</string>
     <string name="choose_instance_long">Bitte wählen Sie unten eine Piped-Instanz aus, die Sie verwenden möchten. Die Piped-Instanz fungiert als Vermittler zwischen Ihnen und YouTube. Diese Instanzen befinden sich an verschiedenen physischen Standorten – erkennbar an den jeweiligen Landesflaggen. Instanzen, die physisch näher bei Ihnen liegen, sind wahrscheinlich schneller als solche, die weiter entfernt sind. Sie können die verwendete Instanz jederzeit in den Einstellungen ändern.</string>
     <string name="sync_server_type">Benutzerdaten (Abonnements, Wiedergabelisten) synchronisieren über</string>

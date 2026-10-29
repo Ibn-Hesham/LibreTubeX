@@ -305,7 +305,7 @@
     <string name="add_to_bookmarks">Adaugă la marcaje</string>
     <string name="forward">Înainte</string>
     <string name="audio_only_mode">Modul numai audio</string>
-    <string name="audio_only_mode_summary">Transformă LibreTube într-un player audio</string>
+    <string name="audio_only_mode_summary">Transformă LibreTubeX într-un player audio</string>
     <string name="help">Ajutor</string>
     <string name="faq">Întrebări frecvente</string>
     <string name="mark_as_watched">Marchează ca vizionat</string>
@@ -471,7 +471,7 @@
     <string name="import_temp_playlist">Dorești importarea un playlist temporar?</string>
     <string name="import_temp_playlist_summary">Dorești să creezi o listă de redare nouă numită „%1$s”? Lista de redare va conține %2$d videoclipuri.</string>
     <string name="contribute_to_dearrow">Contribuie la DeArrow</string>
-    <string name="external_download_provider_summary">Introdu numele pachetului aplicației pe care dorești să o folosești pentru descărcarea videoclipurilor. Lasă câmpul necompletat pentru a folosi programul de descărcare integrat al LibreTube.</string>
+    <string name="external_download_provider_summary">Introdu numele pachetului aplicației pe care dorești să o folosești pentru descărcarea videoclipurilor. Lasă câmpul necompletat pentru a folosi programul de descărcare integrat al LibreTubeX.</string>
     <string name="screenshot">Captură de ecran</string>
     <string name="createNewPlaylist">Creează o listă de redare nouă</string>
     <string name="category_exclusive_access">Acces exclusiv</string>
@@ -543,7 +543,7 @@
     <string name="resume_all">Reia descărcările</string>
     <string name="comment_verified">Verificat</string>
     <string name="comment_pinned">Fixat</string>
-    <string name="welcome">Bine ai venit pe LibreTube! Pentru a începe, te rog să selectezi unul dintre modurile de sincronizare de mai jos, pentru a decide dacă dorești să sincronizezi datele tale de utilizator pe mai multe dispozitive.</string>
+    <string name="welcome">Bine ai venit pe LibreTubeX! Pentru a începe, te rog să selectezi unul dintre modurile de sincronizare de mai jos, pentru a decide dacă dorești să sincronizezi datele tale de utilizator pe mai multe dispozitive.</string>
     <string name="choose_instance">Te rog să alegi mai întâi o instanță!</string>
     <string name="choose_instance_long">Te rog să alegi de mai jos o instanță Piped pe care dorești să o utilizezi. Instanța Piped va acționa ca intermediar între tine și YouTube. Aceste instanțe se află în diverse locații fizice – indicate prin steagul (steagurile) țării respective. Instanțele situate fizic mai aproape de tine sunt, probabil, mai rapide decât cele care se află la o distanță mai mare. Poți schimba oricând instanța pe care o utilizezi din setări.</string>
     <string name="load_data_from">Încarcă datele de pe YouTube</string>

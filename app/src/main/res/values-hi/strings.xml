@@ -310,7 +310,7 @@
     <string name="alternative_pip_controls">वैकल्पिक पीआईपी नियंत्रण</string>
     <string name="alternative_pip_controls_summary">आगे और पीछे करने के बजाय केवल ऑडियो दिखाएं और PiP में नियंत्रण छोड़ें</string>
     <string name="audio_only_mode">ऑडियो केवल मोड</string>
-    <string name="audio_only_mode_summary">LibreTube को म्यूजिक प्लेयर में बदलें</string>
+    <string name="audio_only_mode_summary">LibreTubeX को म्यूजिक प्लेयर में बदलें</string>
     <string name="no_subtitle">कोई उपशीर्षक नहीं</string>
     <string name="download_paused">डाउनलोड रोका गया</string>
     <string name="download_completed">डाउनलोड पूरा हुआ</string>

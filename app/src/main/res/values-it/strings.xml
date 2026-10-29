@@ -316,7 +316,7 @@
     <string name="unknown">Sconosciuto</string>
     <string name="resume">Riprendi</string>
     <string name="audio_only_mode">Modalità solo audio</string>
-    <string name="audio_only_mode_summary">Trasforma LibreTube in un riproduttore musicale</string>
+    <string name="audio_only_mode_summary">Trasforma LibreTubeX in un riproduttore musicale</string>
     <string name="sleep_timer">Promemoria per dormire</string>
     <string name="skip_silence">Salta il silenzio</string>
     <string name="help">Aiuto</string>
@@ -472,7 +472,7 @@
     <string name="thumbnail_time">Minuto anteprima</string>
     <string name="best_quality">Migliore</string>
     <string name="external_download_provider">Fornitore di download esterno</string>
-    <string name="external_download_provider_summary">Inserisci il nome del pacchetto dell\'app che vuoi usare per scaricare i video. Lascia vuoto per usare il downloader integrato di LibreTube.</string>
+    <string name="external_download_provider_summary">Inserisci il nome del pacchetto dell\'app che vuoi usare per scaricare i video. Lascia vuoto per usare il downloader integrato di LibreTubeX.</string>
     <string name="screenshot">Cattura dello schermo</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Estrazione locale del video</string>
@@ -543,7 +543,7 @@
     <string name="comment_verified">Verificato</string>
     <string name="comment_pinned">Fissato</string>
     <string name="courses">Corsi</string>
-    <string name="welcome">Benvenuto su LibreTube! Per iniziare, seleziona qui sotto una modalità di sincronizzazione per decidere se sincronizzare i tuoi dati utente tra i dispositivi.</string>
+    <string name="welcome">Benvenuto su LibreTubeX! Per iniziare, seleziona qui sotto una modalità di sincronizzazione per decidere se sincronizzare i tuoi dati utente tra i dispositivi.</string>
     <string name="choose_instance">Scegli prima un\'istanza!</string>
     <string name="choose_instance_long">Scegli qui sotto un\'istanza Piped da usare. L\'istanza Piped farà da intermediario tra te e YouTube. Queste istanze si trovano in diverse posizioni fisiche, indicate dalla bandiera del rispettivo paese. Le istanze fisicamente più vicine a te sono probabilmente più veloci di quelle lontane. Puoi cambiare l\'istanza usata nelle impostazioni in qualsiasi momento.</string>
     <string name="load_data_from">Carica i dati di YouTube da</string>

@@ -145,7 +145,7 @@
     <string name="show_updates">Leita sjálfkrafa að uppfærslum</string>
     <string name="color_yellow">Galandi gult</string>
     <string name="color_green">Grúví grænt</string>
-    <string name="audio_only_mode_summary">Breyttu LibreTube í tónlistarspilara</string>
+    <string name="audio_only_mode_summary">Breyttu LibreTubeX í tónlistarspilara</string>
     <string name="skip_silence">Sleppa þögnum</string>
     <string name="external_download_provider">Utanaðkomandi niðurhalsveita</string>
     <string name="download_channel_name">Niðurhalsþjónusta</string>
@@ -452,7 +452,7 @@
     <string name="category_outro">Lokaskjáir og kreditlistar</string>
     <string name="trends">Tilhneiging</string>
     <string name="screen_orientation">Stefna skjás</string>
-    <string name="external_download_provider_summary">Settu inn nafn forritspakkans sem þú vilt að sé notaður til að sækja myndskeið. Skildu þetta eftir autt til að nota innbyggða niðurhalarann í LibreTube.</string>
+    <string name="external_download_provider_summary">Settu inn nafn forritspakkans sem þú vilt að sé notaður til að sækja myndskeið. Skildu þetta eftir autt til að nota innbyggða niðurhalarann í LibreTubeX.</string>
     <string name="player_channel_name">Spilaraþjónusta</string>
     <string name="player_channel_description">Birtir tilkynningu við afspilun</string>
     <string name="download_channel_description">Birtir tilkynningu við niðurhal efnis.</string>

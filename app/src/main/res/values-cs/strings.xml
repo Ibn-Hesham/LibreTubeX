@@ -316,7 +316,7 @@
     <string name="unknown">Neznámý</string>
     <string name="resume">Pokračovat</string>
     <string name="audio_only_mode">Režim pouze zvuku</string>
-    <string name="audio_only_mode_summary">Proměňte LibreTube v hudební přehrávač</string>
+    <string name="audio_only_mode_summary">Proměňte LibreTubeX v hudební přehrávač</string>
     <string name="sleep_timer">Časovač spánku</string>
     <string name="skip_silence">Přeskočit ticho</string>
     <string name="help">Nápověda</string>
@@ -472,7 +472,7 @@
     <string name="thumbnail_time">Čas miniatury</string>
     <string name="best_quality">Nejlepší</string>
     <string name="external_download_provider">Externí poskytovatel stahování</string>
-    <string name="external_download_provider_summary">Zadejte název balíčku aplikace, kterou chcete použít pro stahování videí. Ponechte prázdné pro použití vestavěné služby stahování LibreTube.</string>
+    <string name="external_download_provider_summary">Zadejte název balíčku aplikace, kterou chcete použít pro stahování videí. Ponechte prázdné pro použití vestavěné služby stahování LibreTubeX.</string>
     <string name="screenshot">Snímek obrazovky</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Lokální extrakce streamu</string>
@@ -545,7 +545,7 @@
     <string name="comment_verified">Ověřený</string>
     <string name="comment_pinned">Připnutý</string>
     <string name="courses">Kurzy</string>
-    <string name="welcome">Vítejte v LibreTube! Začněte výběrem synchronizačního režimu níže a rozhodněte se, zda chcete synchronizovat vaše uživatelská data napříč zařízeními.</string>
+    <string name="welcome">Vítejte v LibreTubeX! Začněte výběrem synchronizačního režimu níže a rozhodněte se, zda chcete synchronizovat vaše uživatelská data napříč zařízeními.</string>
     <string name="choose_instance">Nejprve si prosím zvolte instanci!</string>
     <string name="load_data_from">Načíst data YouTube z</string>
     <string name="load_data_from_local">Přímo z YouTube</string>

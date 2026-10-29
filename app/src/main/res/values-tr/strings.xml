@@ -311,7 +311,7 @@
     <string name="alternative_pip_controls">Alternatif PiP (RiR) denetimleri</string>
     <string name="pinch_control">Kıstırma denetimi</string>
     <string name="audio_only_mode">Sadece ses modu</string>
-    <string name="audio_only_mode_summary">LibreTube uygulamasını bir müzik çalara dönüştürün</string>
+    <string name="audio_only_mode_summary">LibreTubeX uygulamasını bir müzik çalara dönüştürün</string>
     <string name="no_subtitle">Alt yazı yok</string>
     <string name="download_paused">İndirme duraklatıldı</string>
     <string name="download_completed">İndirme tamamlandı</string>
@@ -471,7 +471,7 @@
     <string name="thumbnail_time">Küçük resim zamanı</string>
     <string name="best_quality">En iyi</string>
     <string name="external_download_provider">Harici indirme sağlayıcısı</string>
-    <string name="external_download_provider_summary">Video indirmek için kullanmak istediğiniz uygulamanın paket adını girin. LibreTube\'un dahili indiricisini kullanmak için boş bırakın.</string>
+    <string name="external_download_provider_summary">Video indirmek için kullanmak istediğiniz uygulamanın paket adını girin. LibreTubeX\'un dahili indiricisini kullanmak için boş bırakın.</string>
     <string name="screenshot">Ekran Görüntüsü</string>
     <string name="pip">RiR</string>
     <string name="local_stream_extraction">Yerel akış çıkarımı</string>
@@ -540,7 +540,7 @@
     <string name="comment_verified">Doğrulandı</string>
     <string name="comment_pinned">Sabitlendi</string>
     <string name="courses">Dersler</string>
-    <string name="welcome">LibreTube\'e hoş geldiniz! Başlamak için lütfen aşağıdan bir eşzamanlama modu seçin ve kullanıcı verilerinizi aygıtlar arasında eşzamanlayıp eşzamanlamayacağınıza karar verin.</string>
+    <string name="welcome">LibreTubeX\'e hoş geldiniz! Başlamak için lütfen aşağıdan bir eşzamanlama modu seçin ve kullanıcı verilerinizi aygıtlar arasında eşzamanlayıp eşzamanlamayacağınıza karar verin.</string>
     <string name="choose_instance">Lütfen önce bir sunucu seçin!</string>
     <string name="choose_instance_long">Lütfen aşağıdan kullanmak istediğiniz bir Piped sunucusunu seçin. Piped sunucusu, siz ve YouTube arasında aracı görevi görecektir. Bu sunucular, ülke bayraklarıyla belirtildiği üzere farklı fiziksel konumlarda yer alır. Size fiziksel olarak daha yakın olan sunucular, daha uzaktaki sunuculara göre genellikle daha hızlıdır. Kullandığınız sunucuyu ayarlardan istediğiniz zaman değiştirebilirsiniz.</string>
     <string name="load_data_from">YouTube verilerini şuradan yükle</string>

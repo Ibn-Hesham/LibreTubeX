@@ -239,7 +239,7 @@
     <string name="change_playlist_description">Ændr playlistebeskrivelse</string>
     <string name="mark_as_unwatched">Markér som ikke set</string>
     <string name="app_backup">App-sikkerhedskopiering</string>
-    <string name="audio_only_mode_summary">Gør LibreTube til en musikafspiller</string>
+    <string name="audio_only_mode_summary">Gør LibreTubeX til en musikafspiller</string>
     <string name="faq">FAQ</string>
     <string name="manual">Manuelt</string>
     <string name="fullscreen_gestures">Gå ind i/ud af fuldskærms-bevægelser</string>
@@ -471,7 +471,7 @@
     <string name="import_temp_playlist_summary">Ønsker du at oprette en ny playliste kaldet \'%1$s\'? Playlisten indeholder %2$d videoer.</string>
     <string name="thumbnail_time">Miniaturebillede tid</string>
     <string name="external_download_provider">Ekstern downloadleverandør</string>
-    <string name="external_download_provider_summary">Indtast pakkenavnet på den app, du vil bruge til at hente videoer. Lad det være tomt for at bruge LibreTubes indbyggede downloader.</string>
+    <string name="external_download_provider_summary">Indtast pakkenavnet på den app, du vil bruge til at hente videoer. Lad det være tomt for at bruge LibreTubeX\' indbyggede downloader.</string>
     <string name="import_watch_history">Importér visningshistorik</string>
     <string name="screenshot">Skærmbillede</string>
     <string name="pip">BiB</string>

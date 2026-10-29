@@ -314,7 +314,7 @@
     <string name="unknown">Nieznane</string>
     <string name="resume">Wznów</string>
     <string name="no_subtitle">Bez napisów</string>
-    <string name="audio_only_mode_summary">Zmień LibreTube w odtwarzacz muzyczny</string>
+    <string name="audio_only_mode_summary">Zmień LibreTubeX w odtwarzacz muzyczny</string>
     <string name="audio_only_mode">Tryb „tylko dźwięk”</string>
     <string name="sleep_timer">Wyłącz po czasie</string>
     <string name="skip_silence">Pomiń cisze</string>
@@ -473,7 +473,7 @@
     <string name="best_quality">Najwyższy</string>
     <string name="thumbnail_time">Pokaż czas na miniaturze</string>
     <string name="external_download_provider">Zewnętrzny dostawca pobierania</string>
-    <string name="external_download_provider_summary">Wpisz nazwę pakietu aplikacji której chcesz używać do pobierania wideo. Pozostaw puste aby używać wbudowanego narzędzia LibreTube.</string>
+    <string name="external_download_provider_summary">Wpisz nazwę pakietu aplikacji której chcesz używać do pobierania wideo. Pozostaw puste aby używać wbudowanego narzędzia LibreTubeX.</string>
     <string name="pip">OwO</string>
     <string name="screenshot">Zrzut ekranu</string>
     <string name="local_stream_extraction">Lokalna ekstrakcja strumieniowa</string>

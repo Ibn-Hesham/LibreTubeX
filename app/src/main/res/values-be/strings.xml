@@ -24,7 +24,7 @@
     <string name="grid">Стоўбцы (ў вертыкальным рэжыме)</string>
     <string name="emptyList">Нічога тут.</string>
     <string name="success">Гатова.</string>
-    <string name="about">Аб LibreTube</string>
+    <string name="about">Аб LibreTubeX</string>
     <string name="systemLanguage">Сістэмны</string>
     <string name="subscribers">%1$s падпісчыкаў</string>
     <string name="settings">Налады</string>
@@ -293,7 +293,7 @@
     <string name="rewind">Перамотка назад</string>
     <string name="add_to_bookmarks">Дадаць у закладкі</string>
     <string name="audio_only_mode">Рэжым толькі аўдыя</string>
-    <string name="audio_only_mode_summary">Ператварыце LibreTube у музычны прайгравальнік</string>
+    <string name="audio_only_mode_summary">Ператварыце LibreTubeX у музычны прайгравальнік</string>
     <string name="sleep_timer">Таймер сну</string>
     <string name="skip_silence">Прапусціць цішыню</string>
     <string name="help">Даведка</string>
@@ -472,7 +472,7 @@
     <string name="title">Загаловак</string>
     <string name="thumbnail_time">Паказваць час на мініяцюры</string>
     <string name="best_quality">Найлепшая</string>
-    <string name="external_download_provider_summary">Назва пакета праграмы, якое будзе выкарыстоўвацца для спампоўкі відэа. Пакіньце пустым, каб спампоўваць праз LibreTube.</string>
+    <string name="external_download_provider_summary">Назва пакета праграмы, якое будзе выкарыстоўвацца для спампоўкі відэа. Пакіньце пустым, каб спампоўваць праз LibreTubeX.</string>
     <string name="external_download_provider">Знешні запамповальнік</string>
     <string name="pip">КўК</string>
     <string name="screenshot">Скрыншот</string>

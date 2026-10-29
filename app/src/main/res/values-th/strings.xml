@@ -249,7 +249,7 @@
     <string name="rewind">กรอกลับ</string>
     <string name="forward">กรอข้าม</string>
     <string name="audio_only_mode">โหมดเสียงเท่านั้น</string>
-    <string name="audio_only_mode_summary">เปลี่ยน LibreTube ให้เป็นเครื่องเล่นเพลง</string>
+    <string name="audio_only_mode_summary">เปลี่ยน LibreTubeX ให้เป็นเครื่องเล่นเพลง</string>
     <string name="sleep_timer">ตั้งเวลาปิด</string>
     <string name="skip_silence">ข้ามส่วนที่เงียบ</string>
     <string name="category">หมวดหมู่</string>
@@ -335,7 +335,7 @@
     <string name="change">เปลี่ยน</string>
     <string name="gestures">ท่าทาง</string>
     <string name="external_download_provider">ผู้ให้ดาวน์โหลดจากภายนอก</string>
-    <string name="external_download_provider_summary">ใส่ชื่อแพ็คเกจของแอปที่คุณจะใช้ในการดาวน์โหลดวิดีโอ ปล่อยเว้นว้างเอาไว้เพื่อใช้ตัวดาวน์โหลดของ LibreTube</string>
+    <string name="external_download_provider_summary">ใส่ชื่อแพ็คเกจของแอปที่คุณจะใช้ในการดาวน์โหลดวิดีโอ ปล่อยเว้นว้างเอาไว้เพื่อใช้ตัวดาวน์โหลดของ LibreTubeX</string>
     <string name="local_stream_extraction_summary">โหลดข้อมูลวิดีโอจาก YouTube โดยตรงโดยไม่ต้องผ่าน Piped</string>
     <string name="local_ryd">ใช้ตัวดึงข้อมูล Return Youtube Dislike โดยตรง</string>
     <string name="local_ryd_summary">ดึงข้อมูลไม่ถูกใจวิดีโอผ่านทาง https://returnyoutubedislikeapi.com โดยตรง</string>
@@ -538,7 +538,7 @@
     <string name="export">ส่งออก</string>
     <string name="exporting">กำลังส่งออก…</string>
     <string name="oidc_login">ดำเนินการต่อด้วย OIDC</string>
-    <string name="welcome">ยินดีต้อนรับสู่ LibreTube! เริ่มด้วยการเลือกโหมดการซิงค์ข้อมูลด้านล่างเพื่อเลือกว่าจะเชื่อมต่อข้อมูลผู้ใช้ของคุณระหว่างอุปกรณ์ต่างๆ หรือไหม</string>
+    <string name="welcome">ยินดีต้อนรับสู่ LibreTubeX! เริ่มด้วยการเลือกโหมดการซิงค์ข้อมูลด้านล่างเพื่อเลือกว่าจะเชื่อมต่อข้อมูลผู้ใช้ของคุณระหว่างอุปกรณ์ต่างๆ หรือไหม</string>
     <string name="missing_auth_falling_back">ไม่เข้าสู่ระบบ ปิดการซิงค์ข้อมูล</string>
     <string name="sync_type_summary_none">เก็บข้อมูลผู้ใช้ทั้งหมดไร้การเชื่อมต่อภายในแอป นั้นหมายถึงคุณจะไม่สามารถเชื่อมต่อข้อมูลระหว่างอุปกรณ์ได้ นี้อาจจะเป็นตัวเลือกที่ดีกว่าถ้าคุณจะใช้แค่อุปกรณ์ตัวนี้ตัวเดียวหรือไม่ต้องการที่จะเชื่อมต่อข้อมูลระหว่างอุปกรณ์</string>
     <string name="sync_type_summary_libretube">เก็บข้อมูลเพลย์ลิสต์และการติดตามผ่านทางซิงค์เซิฟเวอร์ของ LibreTube (%1$s) คุณจะสามารถเข้าสู่ระบบบัญชีของคุณด้วยอุปกรณ์อื่นๆ ที่จะสามารถเข้าถึงข้อมูลเพลย์ลิสต์และการติดตามของคุณ ประกาศความเป็นส่วนตัว: ข้อมูลผู้ใช้จะเป็นข้อมูลแฝงบนเซิฟเวอร์ แต่ไม่มีการเข้ารหัสทั้งสองฝั่ง ด้วยตัวเลือกแล้วคุณสามารถตั้งเซิฟเวอร์ในเวอร์ชั่นของคุณได้ แต่โดยปกติ เซิฟเวอร์ทางการสามารถใช้ได้อย่างปกติ</string>

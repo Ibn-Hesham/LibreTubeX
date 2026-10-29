@@ -316,7 +316,7 @@
     <string name="unknown">ଅଜ୍ଞାତ</string>
     <string name="resume">ପୁଣି ଆରମ୍ଭ କରନ୍ତୁ</string>
     <string name="audio_only_mode">କେବଳ ଅଡିଓ ମୋଡ୍</string>
-    <string name="audio_only_mode_summary">LibreTube କୁ ଏକ ମ୍ୟୁଜିକ୍ ପ୍ଲେୟାରରେ ପରିଣତ କର</string>
+    <string name="audio_only_mode_summary">LibreTubeX କୁ ଏକ ମ୍ୟୁଜିକ୍ ପ୍ଲେୟାରରେ ପରିଣତ କର</string>
     <string name="sleep_timer">ଶୋଇବା ସମୟ</string>
     <string name="skip_silence">ନୀରବତା ଛାଡିଦିଅ</string>
     <string name="help">ସାହାଯ୍ୟ</string>
@@ -452,7 +452,7 @@
     <string name="default_language">ଡିଫଲ୍ଟ</string>
     <string name="external_player">ବାହ୍ୟ ଖେଳାଳୀ</string>
     <string name="change">ପରିବର୍ତ୍ତନ କରନ୍ତୁ</string>
-    <string name="external_download_provider_summary">ଭିଡିଓ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ ଆପଣ ବ୍ୟବହାର କରିବାକୁ ଚାହୁଁଥିବା ଆପର ପ୍ୟାକେଜ୍ ନାମ ପ୍ରବେଶ କରନ୍ତୁ । LibreTube ର ଇନବିଲ୍ଟ ଡାଉନଲୋଡର୍ ବ୍ୟବହାର କରିବାକୁ ଖାଲି ଛାଡିଦିଅ ।</string>
+    <string name="external_download_provider_summary">ଭିଡିଓ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ ଆପଣ ବ୍ୟବହାର କରିବାକୁ ଚାହୁଁଥିବା ଆପର ପ୍ୟାକେଜ୍ ନାମ ପ୍ରବେଶ କରନ୍ତୁ । LibreTubeX ର ଇନବିଲ୍ଟ ଡାଉନଲୋଡର୍ ବ୍ୟବହାର କରିବାକୁ ଖାଲି ଛାଡିଦିଅ ।</string>
     <string name="external_download_provider">ବାହ୍ୟ ଡାଉନଲୋଡ୍ ପ୍ରଦାନକାରୀ</string>
     <string name="import_temp_playlist_summary">ଆପଣ \'%1$s\' ନାମକ ଏକ ନୂତନ ପ୍ଲେଲିଷ୍ଟ ସୃଷ୍ଟି କରିବାକୁ ଚାହୁଁଛନ୍ତି କି? ପ୍ଲେ ଲିଷ୍ଟରେ%2$d ଭିଡିଓ ରହିବ ।</string>
     <string name="download_playlist">ପ୍ଲେଲିଷ୍ଟ ଡାଉନଲୋଡ୍ କରନ୍ତୁ</string>

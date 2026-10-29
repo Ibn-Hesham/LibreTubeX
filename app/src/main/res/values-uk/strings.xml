@@ -52,7 +52,7 @@
     <string name="addToPlaylist">Додати до списку відтворення</string>
     <string name="success">Виконано.</string>
     <string name="fail">Не вдалося :(</string>
-    <string name="about">Про LibreTube</string>
+    <string name="about">Про LibreTubeX</string>
     <string name="changeLanguage">Мова</string>
     <string name="systemLanguage">Системний</string>
     <string name="systemDefault">Як у системі</string>
@@ -310,7 +310,7 @@
     <string name="alternative_pip_controls">Альтернативні елементи керування PiP</string>
     <string name="alternative_pip_controls_summary">Показувати лише аудіо та пропускати елементи керування в PiP замість перемотування вперед та назад</string>
     <string name="audio_only_mode">Режим лише аудіо</string>
-    <string name="audio_only_mode_summary">Перетворіть LibreTube на музичний програвач</string>
+    <string name="audio_only_mode_summary">Перетворіть LibreTubeX на музичний програвач</string>
     <string name="no_subtitle">Немає субтитрів</string>
     <string name="download_paused">Завантаження призупинено</string>
     <string name="concurrent_downloads_limit_reached">Досягнуто максимальної кількості одночасних завантажень.</string>
@@ -474,7 +474,7 @@
     <string name="thumbnail_time">Показувати час на мініатюрі</string>
     <string name="best_quality">Найвища</string>
     <string name="external_download_provider">Зовнішній постачальник завантажень</string>
-    <string name="external_download_provider_summary">Введіть назву пакету застосунку, який потрібно використовувати для завантаження відео. Залиште порожнім, щоб використовувати вбудований завантажувач LibreTube.</string>
+    <string name="external_download_provider_summary">Введіть назву пакету застосунку, який потрібно використовувати для завантаження відео. Залиште порожнім, щоб використовувати вбудований завантажувач LibreTubeX.</string>
     <string name="screenshot">Знімок екрана</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Видобування локального потоку</string>
@@ -547,7 +547,7 @@
     <string name="comment_verified">Перевірено</string>
     <string name="comment_pinned">Закріплено</string>
     <string name="courses">Курси</string>
-    <string name="welcome">Ласкаво просимо до LibreTube! Щоб розпочати, виберіть режим синхронізації нижче, щоб вирішити, чи синхронізувати дані користувача на різних пристроях.</string>
+    <string name="welcome">Ласкаво просимо до LibreTubeX! Щоб розпочати, виберіть режим синхронізації нижче, щоб вирішити, чи синхронізувати дані користувача на різних пристроях.</string>
     <string name="choose_instance">Будь ласка, спочатку виберіть екземпляр!</string>
     <string name="choose_instance_long">Будь ласка, виберіть екземпляр Piped для використання з наведених нижче. Екземпляр Piped виступатиме посередником між вами та YouTube. Ці екземпляри розташовані в різних фізичних місцях – позначених прапором(ами) їхніх країн. Екземпляри, фізично розташовані ближче до вас, ймовірно, працюють швидше, ніж ті, що не розташовані ближче. Ви можете будь-коли змінити екземпляр, який використовуєте, в налаштуваннях.</string>
     <string name="load_data_from">Завантажити дані YouTube з</string>

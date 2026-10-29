@@ -325,7 +325,7 @@
     <string name="nothing_selected">No hi ha res seleccionat</string>
     <string name="color_violet">Violeta versàtil</string>
     <string name="playlistUrl">URL de la llista de reproducció</string>
-    <string name="audio_only_mode_summary">Converteix LibreTube en un reproductor de música</string>
+    <string name="audio_only_mode_summary">Converteix LibreTubeX en un reproductor de música</string>
     <string name="sleep_timer">Temporitzador</string>
     <string name="skip_silence">Salta el silenci</string>
     <string name="help">Ajuda</string>
@@ -472,7 +472,7 @@
     <string name="title">Títol</string>
     <string name="screenshot">Captura de pantalla</string>
     <string name="external_download_provider">Proveïdor extern de descàrregues</string>
-    <string name="external_download_provider_summary">Introduïu el nom del paquet de l\'app que vulgueu fer servir per a descarregar vídeos. Deixeu-ho en blanc per a fer servir el descarregador integrat de LibreTube.</string>
+    <string name="external_download_provider_summary">Introduïu el nom del paquet de l\'app que vulgueu fer servir per a descarregar vídeos. Deixeu-ho en blanc per a fer servir el descarregador integrat de LibreTubeX.</string>
     <string name="category_exclusive_access">Accés exclusiu</string>
     <string name="createNewPlaylist">Crea nova llista de reproducció</string>
     <string name="upcoming">Pròximament</string>
@@ -543,7 +543,7 @@
     <string name="showing_results_for">Es mostren els resultats de:</string>
     <string name="long_press_fast_forward">Avança ràpidament en prémer llarg</string>
     <string name="long_press_fast_forward_summary">Reprodueix vídeo a doble velocitat mentre toqueu i manteniu premuda la pantalla.</string>
-    <string name="welcome">Benvingut al LibreTube! Per començar, seleccioneu un mode de sincronització a continuació per a decidir si sincronitzar les dades de l\'usuari entre dispositius.</string>
+    <string name="welcome">Benvingut al LibreTubeX! Per començar, seleccioneu un mode de sincronització a continuació per a decidir si sincronitzar les dades de l\'usuari entre dispositius.</string>
     <string name="load_data_from">Carrega les dades de YouTube de:</string>
     <string name="load_data_from_local">Directament des de YouTube</string>
     <string name="load_data_from_piped">via Piped (obsolet)</string>

@@ -309,7 +309,7 @@
     <string name="alternative_pip_controls_summary">Mostrar boton \"Modo audio\" y Anterior/Siguiente en la ventana flotante en lugar de avance y retroceso</string>
     <string name="rewind">Retroceder</string>
     <string name="alternative_pip_controls">Controles PiP alternativos</string>
-    <string name="audio_only_mode_summary">Convierte LibreTube en un reproductor de música</string>
+    <string name="audio_only_mode_summary">Convierte LibreTubeX en un reproductor de música</string>
     <string name="no_subtitle">Sin subtítulos</string>
     <string name="download_paused">Descarga pausada</string>
     <string name="download_completed">Descarga completa</string>
@@ -516,7 +516,7 @@
     <string name="add_to_group">Agregar al grupo</string>
     <string name="uptime">%.2f%% tiempo de subida</string>
     <string name="external_download_provider">Proveedor externo de descargas</string>
-    <string name="external_download_provider_summary">Escriba el nombre de paquete de la app que quiera usar para descargar videos. Déjelo vacío si quiere usar el descargador incorporado de LibreTube.</string>
+    <string name="external_download_provider_summary">Escriba el nombre de paquete de la app que quiera usar para descargar videos. Déjelo vacío si quiere usar el descargador incorporado de LibreTubeX.</string>
     <string name="local_stream_extraction">Extracción de transmisión local</string>
     <string name="local_stream_extraction_summary">Directamente buscar información de reproducción del video desde YouTube sin usar Piped.</string>
     <string name="local_ryd">Extractor local de Devolver el No Me Gusta de YouTube</string>

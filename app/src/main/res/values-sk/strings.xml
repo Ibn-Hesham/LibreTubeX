@@ -69,7 +69,7 @@
     <string name="startpage">Domov</string>
     <string name="subscriptions">Odbery</string>
     <string name="download">Stiahnuť</string>
-    <string name="about">O LibreTube</string>
+    <string name="about">O LibreTubeX</string>
     <string name="unsubscribe">Zrušiť odber</string>
     <string name="share">Zdieľať</string>
     <string name="error">Niečo sa pokazilo.</string>
@@ -381,7 +381,7 @@
     <string name="color_violet">Univerzálne fialový</string>
     <string name="playlistUrl">Adresa URL zoznamu skladieb</string>
     <string name="shuffle">Náhodný výber</string>
-    <string name="audio_only_mode_summary">Premení LibreTube na prehrávač hudby</string>
+    <string name="audio_only_mode_summary">Premení LibreTubeX na prehrávač hudby</string>
     <string name="skip_silence">Vynechať ticho</string>
     <string name="help">Pomoc</string>
     <string name="category">Kategória</string>
@@ -472,7 +472,7 @@
     <string name="thumbnail_time">Čas miniatúry</string>
     <string name="best_quality">Najlepšia</string>
     <string name="external_download_provider">Externý poskytovateľ sťahovania</string>
-    <string name="external_download_provider_summary">Zadajte názov aplikácie, ktorú chcete používať na sťahovanie videí. Ak chcete použiť vstavaný sťahovač LibreTube, nechajte prázdne miesto.</string>
+    <string name="external_download_provider_summary">Zadajte názov aplikácie, ktorú chcete používať na sťahovanie videí. Ak chcete použiť vstavaný sťahovač LibreTubeX, nechajte prázdne miesto.</string>
     <string name="screenshot">Snímka obrazovky</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Lokálna extrakcia streamu</string>
@@ -546,7 +546,7 @@
     <string name="comment_pinned">Pripnutý</string>
     <string name="courses">Kurzy</string>
     <string name="account">Účet</string>
-    <string name="welcome">Vitajte v LibreTube! Pre začiatok si prosím vyberte režim synchronizácie nižšie, aby ste rozhodli, či sa majú vaše používateľské údaje synchronizovať medzi zariadeniami.</string>
+    <string name="welcome">Vitajte v LibreTubeX! Pre začiatok si prosím vyberte režim synchronizácie nižšie, aby ste rozhodli, či sa majú vaše používateľské údaje synchronizovať medzi zariadeniami.</string>
     <string name="choose_instance">Najprv si prosím vyberte inštanciu!</string>
     <string name="choose_instance_long">Z nižšie uvedených si prosím vyberte inštanciu Piped, ktorú chcete používať. Inštancia Piped bude fungovať ako sprostredkovateľ medzi vami a YouTube. Tieto inštancie sa nachádzajú na rôznych fyzických miestach – čo je označené vlajkami príslušných krajín. Inštancie, ktoré sú fyzicky bližšie k vám, budú pravdepodobne rýchlejšie ako tie, ktoré sú ďalej. Inštanciu, ktorú používate, môžete kedykoľvek zmeniť v nastaveniach.</string>
     <string name="load_data_from">Načítať údaje YouTube z</string>

@@ -309,7 +309,7 @@
     <string name="fullscreen_gestures">Cử chỉ vào/thoát toàn màn hình</string>
     <string name="alternative_pip_controls_summary">Chỉ hiển thị âm thanh và bỏ qua các điều khiển trong HtH thay vì tua đi và tua lại</string>
     <string name="home_tab_content">Nội dung thẻ trang chủ</string>
-    <string name="audio_only_mode_summary">Biến LibreTube thành một trình phát nhạc</string>
+    <string name="audio_only_mode_summary">Biến LibreTubeX thành một trình phát nhạc</string>
     <string name="sb_custom_colors">Tùy chỉnh màu phân đoạn</string>
     <string name="app_backup">Sao lưu ứng dụng</string>
     <string name="sleep_timer">Hẹn giờ ngủ</string>
@@ -508,7 +508,7 @@
         <item quantity="other">%d phút</item>
     </plurals>
     <string name="external_download_provider">Dịch vụ tải đoạn phim bên ngoài</string>
-    <string name="external_download_provider_summary">Điền id ứng dụng mà bạn muốn dùng để tải đoạn phim. Bỏ trống để dùng dịch vụ tải đoạn phim có sẵn của LibreTube.</string>
+    <string name="external_download_provider_summary">Điền id ứng dụng mà bạn muốn dùng để tải đoạn phim. Bỏ trống để dùng dịch vụ tải đoạn phim có sẵn của LibreTubeX.</string>
     <string name="local_stream_extraction">Trính xuất đoạn phim từ nguồn</string>
     <string name="local_stream_extraction_summary">Trực tiếp trích xuất thông tin phát lại của đoạn phim từ YouTube mà không dùng đến Piped.</string>
     <string name="local_ryd">Trích xuất từ Return Youtube Dislike</string>
@@ -537,7 +537,7 @@
     <string name="comment_verified">Đã xác thực</string>
     <string name="comment_pinned">Đã ghim</string>
     <string name="courses">Các khoá học</string>
-    <string name="welcome">Chào mừng đến với LibreTube! Để bắt đầu, vui lòng chọn một chế độ đồng bộ bên dưới để quyết định xem sẽ đồng bộ dữ liệu sử dụng của bạn trên khắp các thiết bị khác nhau như thế nào.</string>
+    <string name="welcome">Chào mừng đến với LibreTubeX! Để bắt đầu, vui lòng chọn một chế độ đồng bộ bên dưới để quyết định xem sẽ đồng bộ dữ liệu sử dụng của bạn trên khắp các thiết bị khác nhau như thế nào.</string>
     <string name="choose_instance">Vui lòng chọn một máy chủ trước!</string>
     <string name="choose_instance_long">Vui lòng chọn một máy chủ Piped bên dưới để sử dụng. Máy chủ Piped sẽ đóng vai trò như bên trung gian giữa bạn và YouTube. Những máy chủ này có vị trí vật lý ở nhiều nơi khác nhau - được biểu thị bởi cờ quốc gia của chúng. Máy chủ có vị trí gần với bạn sẽ có khả năng truyền tải nhanh hơn. Bạn cũng có thể thay đổi cài đặt này bất cứ khi nào bạn muốn.</string>
     <string name="load_data_from">Tải dữ liệu YouTube từ</string>

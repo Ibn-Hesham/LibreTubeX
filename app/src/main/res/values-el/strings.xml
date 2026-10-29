@@ -307,7 +307,7 @@
     <string name="queue">Ουρά</string>
     <string name="livestreams">Ζωντανές Ροές</string>
     <string name="replies">Απαντήσεις</string>
-    <string name="audio_only_mode_summary">Μετατρέψτε το LibreTube σε πρόγραμμα αναπαραγωγής μουσικής</string>
+    <string name="audio_only_mode_summary">Μετατρέψτε το LibreTubeX σε πρόγραμμα αναπαραγωγής μουσικής</string>
     <string name="concurrent_downloads_limit_reached">Το μέγιστο όριο ταυτόχρονων λήψεων έχει συμπληρωθεί</string>
     <string name="unknown">Άγνωστος</string>
     <string name="resume">Συνέχιση</string>

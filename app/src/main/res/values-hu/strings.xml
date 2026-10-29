@@ -316,7 +316,7 @@
     <string name="resume">Folytatás</string>
     <string name="concurrent_downloads_limit_reached">Az egyidejű letöltések maximális száma elérve.</string>
     <string name="audio_only_mode">Csak hang mód</string>
-    <string name="audio_only_mode_summary">Változtassa a LibreTube-ot zenelejátszóvá</string>
+    <string name="audio_only_mode_summary">Változtassa a LibreTubeX-ot zenelejátszóvá</string>
     <string name="sleep_timer">Elalvási időzítő</string>
     <string name="skip_silence">Csend átugrása</string>
     <string name="help">Súgó</string>
@@ -471,7 +471,7 @@
     <string name="contribute_to_dearrow">Közreműködés a DeArrow-hoz</string>
     <string name="best_quality">Legjobb</string>
     <string name="external_download_provider">Külső letöltési szolgáltató</string>
-    <string name="external_download_provider_summary">Adja meg a videók letöltéséhez használni kívánt alkalmazás csomagnevét. A LibreTube beépített letöltőjének használatához hagyja üresen.</string>
+    <string name="external_download_provider_summary">Adja meg a videók letöltéséhez használni kívánt alkalmazás csomagnevét. A LibreTubeX beépített letöltőjének használatához hagyja üresen.</string>
     <string name="screenshot">Képernyőkép</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Helyi közvetítés kinyerése</string>
@@ -540,7 +540,7 @@
     <string name="comment_verified">Ellenőrzött</string>
     <string name="comment_pinned">Kitűzött</string>
     <string name="courses">Kurzusok</string>
-    <string name="welcome">Üdvözlünk a LibreTube-ban! A kezdéshez válasszon az alábbi szinkronizálási módok közül annak eldöntéséhez, hogy szeretné-e szinkronizálni a felhasználói adataidat az eszközei között.</string>
+    <string name="welcome">Üdvözlünk a LibreTubeX-ban! A kezdéshez válasszon az alábbi szinkronizálási módok közül annak eldöntéséhez, hogy szeretné-e szinkronizálni a felhasználói adataidat az eszközei között.</string>
     <string name="choose_instance">Először válasszon ki egy példányt!</string>
     <string name="choose_instance_long">Válasszon az alábbiak közül egy használni kívánt Piped példányt. A Piped példány közvetítőként fog működni Ön és a YouTube között. Ezek a példányok különböző földrajzi helyeken találhatók – ezt az országzászlók jelzik. A Önhöz fizikailag közelebb lévő példányok várhatóan gyorsabbak, mint a távolabb találhatók. A használt példányt a beállításokban bármikor megváltoztathatja.</string>
     <string name="load_data_from">YouTube-adatok betöltése innen</string>

@@ -316,7 +316,7 @@
     <string name="unknown">לא ידוע</string>
     <string name="resume">המשך</string>
     <string name="audio_only_mode">מצב שמע בלבד</string>
-    <string name="audio_only_mode_summary">הפיכת LibreTube לנגן מוזיקה</string>
+    <string name="audio_only_mode_summary">הפיכת LibreTubeX לנגן מוזיקה</string>
     <string name="sleep_timer">מתזמן שינה</string>
     <string name="skip_silence">דילוג על שקט</string>
     <string name="help">עזרה</string>
@@ -475,7 +475,7 @@
     <string name="thumbnail_time">זמן תצוגה ממוזערת</string>
     <string name="import_temp_playlist_summary">ליצור רשימת נגינה חדשה בשם ‚%1$s’? רשימת הנגינה תכיל %2$d סרטונים.</string>
     <string name="screenshot">צילום מסך</string>
-    <string name="external_download_provider_summary">נא למלא את שם חבילת היישום לשימוש להורדת סרטונים. יש להשאיר ריק כדי להשתמש במוריד המובנה של LibreTube.</string>
+    <string name="external_download_provider_summary">נא למלא את שם חבילת היישום לשימוש להורדת סרטונים. יש להשאיר ריק כדי להשתמש במוריד המובנה של LibreTubeX.</string>
     <string name="local_stream_extraction">חילוץ תזרים מקומי</string>
     <string name="import_watch_history">ייבוא היסטוריית צפייה</string>
     <string name="dialog_play_offline_body">לנגן את הסרטון מתיקיית ההורדה?</string>
@@ -551,7 +551,7 @@
     <string name="account">חשבון</string>
     <string name="long_press_fast_forward">דילוג מהיר בלחיצה ארוכה</string>
     <string name="resume_all">המשך הורדות</string>
-    <string name="welcome">ברוך בואך ל־LibreTube! בתור התחלה, נא לבחור מצב סנכרון להלן כדי להחליט האם לסנכרן את נתוני המשתמש שלך בין מכשירים.</string>
+    <string name="welcome">ברוך בואך ל־LibreTubeX! בתור התחלה, נא לבחור מצב סנכרון להלן כדי להחליט האם לסנכרן את נתוני המשתמש שלך בין מכשירים.</string>
     <string name="missing_auth_falling_back">לא נכנסת לחשבון. סנכרון נתונים כבוי.</string>
     <string name="sync_type_summary_none">לאחסן את כל נתוני המשתמש במנותק בתוך היישומון. משמעות הבחירה הבית היא שאי אפשר לסנכרן נתונים בין המכשירים של, אך זאת עשויה להתברר כבחירה המכונה אם יש לך רק מכשיר אחד או שלא אכפת לך לסנכרן בין מכשירים.</string>
     <string name="oidc_login">להמשיך עם OIDC</string>

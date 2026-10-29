@@ -310,7 +310,7 @@
     <string name="alternative_pip_controls">ضوابط الفيديوهات العائمة</string>
     <string name="alternative_pip_controls_summary">إظهار الصوت فقط وتخطي ضوابط الفيديوهات العائمة بدلاً من التقديم والترجيع</string>
     <string name="audio_only_mode">وضع الصوت فقط</string>
-    <string name="audio_only_mode_summary">حول LibreTube إلى مشغل موسيقى</string>
+    <string name="audio_only_mode_summary">حول LibreTubeX إلى مشغل موسيقى</string>
     <string name="no_subtitle">لا توجد ترجمة</string>
     <string name="download_paused">إيقاف التنزيل مؤقتًا</string>
     <string name="download_completed">اكتمل التنزيل</string>
@@ -475,7 +475,7 @@
     <string name="thumbnail_time">وقت الصورة المصغرة</string>
     <string name="best_quality">الأفضل</string>
     <string name="external_download_provider">مزود التحميل الخارجي</string>
-    <string name="external_download_provider_summary">أدخل اسم حزمة التطبيق الذي تريد استخدامه لتنزيل مقاطع الفيديو. اتركه فارغًا لاستخدام أداة التنزيل المدمجة في LibreTube.</string>
+    <string name="external_download_provider_summary">أدخل اسم حزمة التطبيق الذي تريد استخدامه لتنزيل مقاطع الفيديو. اتركه فارغًا لاستخدام أداة التنزيل المدمجة في LibreTubeX.</string>
     <string name="screenshot">لقطة شاشة</string>
     <string name="pip">فيديو عائم</string>
     <string name="local_stream_extraction_summary">جلب معلومات تشغيل الفيديو مباشرة من YouTube دون استخدام Piped.</string>
@@ -552,7 +552,7 @@
     <string name="comment_verified">مُتحقّق منه</string>
     <string name="comment_pinned">مثبَّت</string>
     <string name="courses">دورات</string>
-    <string name="welcome">مرحبًا بك في LibreTube! للبدء، يُرجى اختيار وضع المزامنة أدناه لتحديد ما إذا كنت تريد مزامنة بياناتك عبر الأجهزة.</string>
+    <string name="welcome">مرحبًا بك في LibreTubeX! للبدء، يُرجى اختيار وضع المزامنة أدناه لتحديد ما إذا كنت تريد مزامنة بياناتك عبر الأجهزة.</string>
     <string name="choose_instance">يرجى اختيار خادم أولاً!</string>
     <string name="choose_instance_long">يُرجى اختيار خادم Piped لاستخدامه من الأسفل. سيعمل خادم Piped كوسيط بينك وبين YouTube. توجد هذه الخوادم في مواقع جغرافية مختلفة — يُشار إليها بعلم/أعلام بلدها. من المرجح أن تكون الخوادم الأقرب إليك جغرافيًا أسرع من الخوادم غير القريبة منك. يمكنك تغيير الخادم الذي تستخدمه من الإعدادات في أي وقت.</string>
     <string name="load_data_from">تحميل بيانات YouTube من</string>

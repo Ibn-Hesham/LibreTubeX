@@ -315,7 +315,7 @@
     <string name="concurrent_downloads_limit_reached">Limite máximo de downloads simultâneos atingido.</string>
     <string name="unknown">Desconhecido</string>
     <string name="resume">Continuar</string>
-    <string name="audio_only_mode_summary">Usar o LibreTube como player de músicas</string>
+    <string name="audio_only_mode_summary">Usar o LibreTubeX como player de músicas</string>
     <string name="audio_only_mode">Somente áudio</string>
     <string name="sleep_timer">Temporizador</string>
     <string name="skip_silence">Pular silêncio</string>
@@ -472,7 +472,7 @@
     <string name="title">Título</string>
     <string name="best_quality">Melhor qualidade</string>
     <string name="external_download_provider">Provedor de download externo</string>
-    <string name="external_download_provider_summary">Digite o nome do pacote da aplicação que deseja usar para baixar vídeos. Deixe em branco para usar o provedor de download do LibreTube.</string>
+    <string name="external_download_provider_summary">Digite o nome do pacote da aplicação que deseja usar para baixar vídeos. Deixe em branco para usar o provedor de download do LibreTubeX.</string>
     <string name="screenshot">Capturar tela</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Extrair informações do vídeo localmente</string>
@@ -543,7 +543,7 @@
     <string name="courses">Cursos</string>
     <string name="comment_verified">Verificado</string>
     <string name="comment_pinned">Fixado</string>
-    <string name="welcome">Bem-vindo ao LibreTube! Para começar, selecione um modo de sincronização abaixo para decidir se deseja sincronizar seus dados de usuário entre dispositivos.</string>
+    <string name="welcome">Bem-vindo ao LibreTubeX! Para começar, selecione um modo de sincronização abaixo para decidir se deseja sincronizar seus dados de usuário entre dispositivos.</string>
     <string name="choose_instance">Por favor, escolha uma instância primeiro!</string>
     <string name="choose_instance_long">Escolha uma instância do Piped na lista abaixo. A instância do Piped atuará como intermediária entre você e o YouTube. Essas instâncias estão localizadas em diferentes lugares físicos, indicados pelas respectivas bandeiras dos países. Instâncias fisicamente mais próximas de você provavelmente serão mais rápidas do que aquelas que estão mais distantes. Você pode alterar a instância utilizada nas configurações a qualquer momento.</string>
     <string name="load_data_from">Carregar dados do YouTube de</string>

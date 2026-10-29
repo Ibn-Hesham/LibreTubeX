@@ -297,7 +297,7 @@
     <string name="trends">熱門影片</string>
     <string name="featured">精選影片</string>
     <string name="audio_only_mode">純音訊模式</string>
-    <string name="audio_only_mode_summary">將LibreTube變成音樂播放器</string>
+    <string name="audio_only_mode_summary">將LibreTubeX變成音樂播放器</string>
     <string name="no_subtitle">無字幕</string>
     <string name="download_paused">下載暫停</string>
     <string name="layout">版面</string>
@@ -470,7 +470,7 @@
     <string name="thumbnail_time">縮圖時間</string>
     <string name="best_quality">最佳</string>
     <string name="external_download_provider">外部下載提供者</string>
-    <string name="external_download_provider_summary">輸入您要用於下載影片的應用程式軟體包名稱。留空以使用 LibreTube 的內建下載程式。</string>
+    <string name="external_download_provider_summary">輸入您要用於下載影片的應用程式軟體包名稱。留空以使用 LibreTubeX 的內建下載程式。</string>
     <string name="screenshot">螢幕截圖</string>
     <string name="pip">畫中畫</string>
     <string name="local_stream_extraction">本機串流擷取</string>
@@ -537,7 +537,7 @@
     <string name="comment_verified">已驗證</string>
     <string name="comment_pinned">已釘選</string>
     <string name="courses">課程</string>
-    <string name="welcome">歡迎來到 LibreTube！開始使用前，請從下方選擇一種同步模式，以決定是否要在各裝置間同步您的使用者資料。</string>
+    <string name="welcome">歡迎來到 LibreTubeX！開始使用前，請從下方選擇一種同步模式，以決定是否要在各裝置間同步您的使用者資料。</string>
     <string name="choose_instance">請先選擇站台！</string>
     <string name="choose_instance_long">請從下方選擇一個 Piped 站台來使用。該 Piped 站台將作為您與 YouTube 之間的中介。這些站台位於不同的實體位置，由其國旗標示。物理位置離您越近的站台，速度通常會比距離較遠的站台更快。您隨時可以在設定中變更所使用的站台。</string>
     <string name="load_data_from">載入 YouTube 資料從</string>

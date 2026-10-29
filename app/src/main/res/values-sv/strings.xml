@@ -371,7 +371,7 @@
     <string name="duration_span">Längd: %1$s</string>
     <string name="category">Kategori</string>
     <string name="play_automatically">Spela upp automatiskt</string>
-    <string name="audio_only_mode_summary">Gör LibreTube till en musikspelare</string>
+    <string name="audio_only_mode_summary">Gör LibreTubeX till en musikspelare</string>
     <string name="unknown_audio_language">Okänt språk för ljudet</string>
     <string name="brightness">Ljusstyrka</string>
     <string name="same_as_fullscreen">Samma som i helskärmsläge</string>
@@ -463,7 +463,7 @@
     <string name="external_player">Extern spelare</string>
     <string name="show_updates">Sök automatiskt efter uppdateringar</string>
     <string name="albums">Album</string>
-    <string name="external_download_provider_summary">Ange paketnamnet för appen som ska användas för att ladda ner videor. Lämna fältet tomt för att använda LibreTubes inbyggda nedladdningsfunktion.</string>
+    <string name="external_download_provider_summary">Ange paketnamnet för appen som ska användas för att ladda ner videor. Lämna fältet tomt för att använda LibreTubeX\' inbyggda nedladdningsfunktion.</string>
     <string name="import_temp_playlist_summary">Vill du skapa en ny spellista med namnet \'%1$s\'? Spellistan kommer att innehålla %2$d videor.</string>
     <string name="best_quality">Högsta</string>
     <string name="contribute_to_dearrow">Bidra till DeArrow</string>

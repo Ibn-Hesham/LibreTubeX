@@ -387,7 +387,7 @@
     <string name="playing_next">Volgende afspelen over %1$s</string>
     <string name="audio_only_mode">Enkel geluid</string>
     <string name="stats_for_nerds">Statistieken voor nerds</string>
-    <string name="audio_only_mode_summary">Verander LibreTube in een muziekspeler</string>
+    <string name="audio_only_mode_summary">Verander LibreTubeX in een muziekspeler</string>
     <string name="go_to_video">Naar video gaan</string>
     <string name="shorts_notifications">Meldingen voor Shorts</string>
     <string name="unknown_or_no_audio">onbekend of geen audio</string>
@@ -471,7 +471,7 @@
     <string name="contribute_to_dearrow">Bĳdragen aan DeArrow</string>
     <string name="best_quality">Best</string>
     <string name="external_download_provider">Externe download­provider</string>
-    <string name="external_download_provider_summary">Voer de pakket­naam in van de app die u wilt gebruiken voor het downloaden van video\'s. Laat dit veld leeg om de ingebouwde downloader van LibreTube te gebruiken.</string>
+    <string name="external_download_provider_summary">Voer de pakket­naam in van de app die u wilt gebruiken voor het downloaden van video\'s. Laat dit veld leeg om de ingebouwde downloader van LibreTubeX te gebruiken.</string>
     <string name="screenshot">Scherm­afdruk</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Stream lokaal uitlezen</string>

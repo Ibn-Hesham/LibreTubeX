@@ -309,7 +309,7 @@
     <string name="rewind">后退</string>
     <string name="alternative_pip_controls">备选画中画控件</string>
     <string name="alternative_pip_controls_summary">在画中画里显示仅音频和跳过控件而非快进和快退控件</string>
-    <string name="audio_only_mode_summary">将 LibreTube 作为音乐播放器</string>
+    <string name="audio_only_mode_summary">将 LibreTubeX 作为音乐播放器</string>
     <string name="no_subtitle">无字幕</string>
     <string name="download_paused">下载已暂停</string>
     <string name="download_completed">下载已完成</string>
@@ -470,7 +470,7 @@
     <string name="thumbnail_time">缩略图时间</string>
     <string name="best_quality">最佳</string>
     <string name="external_download_provider">外部下载提供者</string>
-    <string name="external_download_provider_summary">输入你想用于下载视频的包的名称。留空使用 LibreTube 的内置下载器。</string>
+    <string name="external_download_provider_summary">输入你想用于下载视频的包的名称。留空使用 LibreTubeX 的内置下载器。</string>
     <string name="screenshot">屏幕截图</string>
     <string name="pip">画中画</string>
     <string name="local_stream_extraction">本地流提取</string>
@@ -537,7 +537,7 @@
     <string name="comment_verified">已认证</string>
     <string name="comment_pinned">已置顶</string>
     <string name="courses">课程</string>
-    <string name="welcome">欢迎来到 LibreTube！要开始，请在下方选择同步模式来确定是否在不同设备间同步你的用户数据。</string>
+    <string name="welcome">欢迎来到 LibreTubeX！要开始，请在下方选择同步模式来确定是否在不同设备间同步你的用户数据。</string>
     <string name="choose_instance">请先选择实例！</string>
     <string name="choose_instance_long">请从下面选择一个要使用的 Piped 实例。 Piped 实例起到你和 YouTube 间中间人的作用。这些实例位于不同的物理位置——由不同的旗帜所表示。物理距离较近的实例可能比较远的实例速度要快。你可以随时在设置中更改使用的实例。</string>
     <string name="load_data_from">YouTube 数据加载源</string>

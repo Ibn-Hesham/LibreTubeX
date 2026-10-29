@@ -309,7 +309,7 @@
     <string name="pause">Jeda</string>
     <string name="alternative_pip_controls">Kontrol gambar dalam gambar alternatif</string>
     <string name="alternative_pip_controls_summary">Hanya tampilkan audio dan kontrol lewati dalam mode gambar dalam gambar daripada maju dan mundur</string>
-    <string name="audio_only_mode_summary">Jadikan LibreTube menjadi pemutar musik</string>
+    <string name="audio_only_mode_summary">Jadikan LibreTubeX menjadi pemutar musik</string>
     <string name="audio_only_mode">Mode hanya audio</string>
     <string name="no_subtitle">Tidak ada takarir</string>
     <string name="download_paused">Unduhan dijeda</string>
@@ -470,7 +470,7 @@
     <string name="title">Judul</string>
     <string name="best_quality">Terbaik</string>
     <string name="external_download_provider">Penyedia unduhan eksternal</string>
-    <string name="external_download_provider_summary">Masukkan nama paket apli yang Anda ingin gunakan untuk mengunduh video. Biarkan kosong untuk menggunakan pengunduh bawaan LibreTube.</string>
+    <string name="external_download_provider_summary">Masukkan nama paket apli yang Anda ingin gunakan untuk mengunduh video. Biarkan kosong untuk menggunakan pengunduh bawaan LibreTubeX.</string>
     <string name="import_watch_history">Impor riwayat tontonan</string>
     <string name="local_ryd">Pengekstrak Return YouTube Dislikes lokal</string>
     <string name="local_ryd_summary">Dapatkan informasi tidak suka secara langsung dari https://returnyoutubedislikeapi.com</string>
@@ -537,7 +537,7 @@
     <string name="courses">Kursus</string>
     <string name="comment_pinned">Disematkan</string>
     <string name="comment_verified">Terverifikasi</string>
-    <string name="welcome">Selamat datang di LibreTube! Untuk memulai, silahkan pilih mode sinkronisasi di bawah ini untuk memutuskan apakah ingin menyinkronkan data pengguna Anda di seluruh perangkat.</string>
+    <string name="welcome">Selamat datang di LibreTubeX! Untuk memulai, silahkan pilih mode sinkronisasi di bawah ini untuk memutuskan apakah ingin menyinkronkan data pengguna Anda di seluruh perangkat.</string>
     <string name="choose_instance">Silahkan pilih sebuah instansi terlebih dahulu!</string>
     <string name="choose_instance_long">Silahkan pilih instansi Piped untuk digunakan dari bawah. Instansi Piped akan bertindak sebagai perantara antara Anda dan YouTube. Instansi ini berlokasi di tempat fisik yang berbeda - ditandai dengan bendera negaranya. Instansi yang secara fisik lebih dekat dengan Anda kemungkinan besar akan lebih cepat daripada instansi yang tidak dekat. Anda dapat mengganti instansi yang Anda gunakan di pengaturan kapan saja.</string>
     <string name="load_data_from">Muat data YouTube dari</string>

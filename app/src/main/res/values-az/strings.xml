@@ -310,7 +310,7 @@
     <string name="alternative_pip_controls_summary">PiP\'də, irəli və geri çevirmə əvəzinə \"yalnız səs\" düyməsin göstər və idarəediciləri ötür</string>
     <string name="rewind">Geri</string>
     <string name="audio_only_mode">Yalnız səs rejimi</string>
-    <string name="audio_only_mode_summary">LibreTube-u musiqi səsləndiriciyə çevir</string>
+    <string name="audio_only_mode_summary">LibreTubeX-u musiqi səsləndiriciyə çevir</string>
     <string name="no_subtitle">Titr yoxdur</string>
     <string name="download_paused">Yükləmə dayandırıldı</string>
     <string name="download_completed">Yükləmə tamamlandı</string>
@@ -471,7 +471,7 @@
     <string name="import_temp_playlist_summary">\'%1$s\' adlı yeni pleylist yaratmaq istəyirsiniz? Pleylistdə %2$d video olacaq.</string>
     <string name="best_quality">Ən yaxşı</string>
     <string name="external_download_provider">Xarici yükləmə təchizatçısı</string>
-    <string name="external_download_provider_summary">Videoları yükləmək üçün istifadə etdiyiniz tətbiqin paket adını daxil edin. LibreTube-un daxili yükləyicisin istifadə etmək üçün boş buraxın.</string>
+    <string name="external_download_provider_summary">Videoları yükləmək üçün istifadə etdiyiniz tətbiqin paket adını daxil edin. LibreTubeX-un daxili yükləyicisin istifadə etmək üçün boş buraxın.</string>
     <string name="screenshot">Ekran görüntüsü</string>
     <string name="pip">ŞiŞ</string>
     <string name="local_stream_extraction_summary">Piped işlətmədən dərhal YouTube-dan video oynatma məlumatın əldə et.</string>
@@ -540,7 +540,7 @@
     <string name="comment_verified">Təsdiqləndi</string>
     <string name="comment_pinned">Nişanlandı</string>
     <string name="courses">Kurslar</string>
-    <string name="welcome">LibreTube-a Xoş Gəlmisiniz! Başlamaq üçün, xahiş olunur istifadəçi məlumatlarınızı cihazlar arasında sinxronlaşdırıb-sinxronlaşdırmayacağınızı müəyyən etmək üçün aşağıda sinxronizasiya rejimini seçin.</string>
+    <string name="welcome">LibreTubeX-a Xoş Gəlmisiniz! Başlamaq üçün, xahiş olunur istifadəçi məlumatlarınızı cihazlar arasında sinxronlaşdırıb-sinxronlaşdırmayacağınızı müəyyən etmək üçün aşağıda sinxronizasiya rejimini seçin.</string>
     <string name="choose_instance">Xahiş olunur, əvvəlcə bir instansiya seçin!</string>
     <string name="choose_instance_long">Xahiş olunur, aşağıdan istifadə etmək üçün bir Piped instansiyası seçin. Piped instansiyası sizinlə YouTube arasında vasitəçi rolunu oynayacaq. Bu instansiyalar fərqli fiziki məkanlarda yerləşir və ölkə bayraq(lar)ı ilə göstərilir. Sizə fiziki olaraq daha yaxın olan instansiyalar, ehtimal ki, daha sürətlidir. İstifadə etdiyiniz instansiyanı istənilən vaxt tənzimləmələrdə dəyişə bilərsiniz.</string>
     <string name="load_data_from">YouTube məlumatlarını buradan yüklə</string>

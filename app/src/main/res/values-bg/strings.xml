@@ -401,7 +401,7 @@
     <string name="category">Категории</string>
     <string name="flameIcon">Летящ пламък</string>
     <string name="play_automatically">Изпални автоматично</string>
-    <string name="audio_only_mode_summary">Превърнете LibreTube в музикален плейър</string>
+    <string name="audio_only_mode_summary">Превърнете LibreTubeX в музикален плейър</string>
     <string name="unknown_audio_language">Неизвестен аудио език</string>
     <string name="same_as_fullscreen">Същото като цял екран</string>
     <string name="category_interaction">Напомняне за взаимодействие</string>
@@ -471,7 +471,7 @@
     <string name="thumbnail_time">Време за миниатюри</string>
     <string name="best_quality">Най-добро</string>
     <string name="external_download_provider">Външен доставчик на изтегляне</string>
-    <string name="external_download_provider_summary">Въведи името на пакета на приложението, което искате да използвате за изтегляне на видеоклипове. Оставете празно, за да използвате вградената програма за изтегляне на LibreTube.</string>
+    <string name="external_download_provider_summary">Въведи името на пакета на приложението, което искате да използвате за изтегляне на видеоклипове. Оставете празно, за да използвате вградената програма за изтегляне на LibreTubeX.</string>
     <string name="screenshot">Екранна снимка</string>
     <string name="pip">PiP</string>
     <string name="local_stream_extraction">Извличане на локален поток</string>
@@ -540,7 +540,7 @@
     <string name="comment_verified">Потвърдено</string>
     <string name="comment_pinned">Закачено</string>
     <string name="courses">Курсове</string>
-    <string name="welcome">Добре дошли в LibreTube! За да започнете, моля, изберете режим на синхронизация по-долу, за да решите дали да синхронизирате потребителските си данни между устройствата.</string>
+    <string name="welcome">Добре дошли в LibreTubeX! За да започнете, моля, изберете режим на синхронизация по-долу, за да решите дали да синхронизирате потребителските си данни между устройствата.</string>
     <string name="choose_instance">Моля, първо изберете екземпляр!</string>
     <string name="choose_instance_long">Моля, изберете отдолу инстанция на Piped, която да използвате. Инстанцията на Piped ще действа като посредник между вас и YouTube. Тези инстанции се намират на различни физически местоположения - обозначени със знамето(ата) на съответната държава. Инстанциите, които са физически по-близо до вас, вероятно са по-бързи от тези, които не са. Можете да промените инстанцията, която използвате, в настройките по всяко време.</string>
     <string name="load_data_from">Зареждане на YouTube данни от</string>
