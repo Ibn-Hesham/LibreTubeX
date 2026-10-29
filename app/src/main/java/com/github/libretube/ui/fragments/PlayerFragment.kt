@@ -255,13 +255,14 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
                 playerController.setPlaybackSpeed(1f)
             }
 
-            // check if video has ended, next video is available and autoplay is enabled/the video is part of a played playlist.
+            // check if video has ended and autoplay is enabled, so that the next queued
+            // video can be played automatically
             if (playbackState == Player.STATE_ENDED) {
                 playerBackgroundBinding.sbSkipBtn.isGone = true
 
                 // if the current tracks are empty, the player is transitioning at the moment
                 val isTransitioning = playerController.currentTracks.isEmpty
-                if ((PlayingQueue.hasNext() || PlayerHelper.autoPlayEnabled) && autoPlayCountdownEnabled && !isTransitioning) {
+                if (PlayerHelper.autoPlayEnabled && PlayingQueue.hasNext() && autoPlayCountdownEnabled && !isTransitioning) {
                     showAutoPlayCountdown()
                 } else {
                     binding.player.showControllerPermanently()

@@ -235,10 +235,16 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
             return
         }
 
+        // the autoplay setting gates every automatic advancement, including the
+        // playing queue; videos requested explicitly (videoId) are unaffected
+        if (videoId == null && !PlayerHelper.autoPlayEnabled) {
+            return
+        }
+
         val nextVideo = videoId ?: PlayingQueue.getNext()
         ?: relatedStreams?.firstOrNull { !it.isLive }?.url?.toID()
-            ?.takeIf { PlayerHelper.autoPlayEnabled && PlayerHelper.relatedStreamsEnabled }
-        ?: return
+            ?.takeIf { PlayerHelper.relatedStreamsEnabled }
+            ?: return
 
         navigateVideo(nextVideo)
     }
