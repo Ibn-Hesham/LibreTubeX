@@ -15,6 +15,7 @@ import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.constants.IntentData
 import com.github.libretube.databinding.AllCaughtUpRowBinding
 import com.github.libretube.databinding.TrendingRowBinding
+import com.github.libretube.db.DatabaseHolder
 import com.github.libretube.enums.DismissableSection
 import com.github.libretube.extensions.dpToPx
 import com.github.libretube.extensions.toID
@@ -169,8 +170,18 @@ class VideoCardsAdapter(
                 true
             }
 
-            // always hide the icon, to avoid issues where the icon is recycled and shown until the web requests succeeds
+            // always hide the badges, to avoid issues where a recycled icon is shown until the request succeeds
             sponsorBadgeCard.isVisible = false
+            downloadBadgeCard.isVisible = false
+            CoroutineScope(Dispatchers.IO).launch {
+                val isDownloaded =
+                    DatabaseHolder.Database.downloadDao().exists(videoId)
+
+                withContext(Dispatchers.Main) {
+                    downloadBadgeCard.isVisible = isDownloaded
+                }
+            }
+
             CoroutineScope(Dispatchers.IO).launch {
                 if (PlayerHelper.sponsorBlockEnabled) {
                     val sponsor = SponsorBlockLabelHelper.getVideoLabels(videoId)
