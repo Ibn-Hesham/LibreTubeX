@@ -10,6 +10,7 @@ import androidx.annotation.OptIn
 import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.util.Log
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaController
@@ -23,6 +24,7 @@ import com.github.libretube.services.OnlinePlayerService
 import com.github.libretube.ui.activities.AbstractPlayerHostActivity
 import com.github.libretube.ui.activities.NoInternetActivity
 import com.github.libretube.ui.fragments.PlayerFragment
+import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.util.PlayingQueue
 import com.github.libretube.util.PlayingQueueMode
 import com.google.common.util.concurrent.FutureCallback
@@ -43,9 +45,13 @@ object BackgroundHelper {
         playerData: PlayerData,
     ) {
         // close the previous video player if open
-        val fragmentManager =
-            ContextHelper.unwrapActivity<AbstractPlayerHostActivity>(context).supportFragmentManager
+        val activity = ContextHelper.unwrapActivity<AbstractPlayerHostActivity>(context)
+        val fragmentManager = activity.supportFragmentManager
         fragmentManager.fragments.firstOrNull { it is PlayerFragment }?.let {
+            // reset the mini player state so no stale bottom padding stays on the
+            // fragment container if the audio player isn't opened afterwards
+            ViewModelProvider(activity)[CommonPlayerViewModel::class.java]
+                .isMiniPlayerVisible.value = false
             fragmentManager.commit { remove(it) }
         }
 

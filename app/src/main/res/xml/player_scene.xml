@@ -46,7 +46,7 @@
         <Constraint
             android:id="@+id/main_container"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="@dimen/mini_player_height"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias="0.5"

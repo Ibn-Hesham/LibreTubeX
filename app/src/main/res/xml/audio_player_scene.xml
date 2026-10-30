@@ -35,7 +35,7 @@
         <Constraint
             android:id="@+id/audio_player_container"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="@dimen/mini_player_height"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias="0.5"
@@ -53,7 +53,7 @@
         <Constraint
             android:id="@+id/miniPlayerControls"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
+            android:layout_height="@dimen/mini_player_height"
             android:alpha="1"
             android:paddingEnd="16dp"
             android:visibility="visible"

@@ -25,6 +25,7 @@ import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
 import androidx.core.view.size
+import androidx.core.view.updatePadding
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -57,6 +58,7 @@ import com.github.libretube.ui.dialogs.ErrorDialog
 import com.github.libretube.ui.dialogs.ImportTempPlaylistDialog
 import com.github.libretube.ui.extensions.onSystemInsets
 import com.github.libretube.ui.fragments.DownloadsFragment
+import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.models.DownloadsViewModel
 import com.github.libretube.ui.models.PlaylistViewModel
 import com.github.libretube.ui.models.SearchViewModel
@@ -77,6 +79,7 @@ class MainActivity : AbstractPlayerHostActivity() {
     private var startFragmentId = R.id.homeFragment
 
     private val subscriptionsViewModel: SubscriptionsViewModel by viewModels()
+    private val playerViewModel: CommonPlayerViewModel by viewModels()
 
     // search related stuff
     private lateinit var searchView: SearchView
@@ -177,6 +180,18 @@ class MainActivity : AbstractPlayerHostActivity() {
                 }
             }
             binding.root.scene.setTransition(transition)
+        }
+
+        // reserve space at the bottom of the fragment container so that the content
+        // of the pages is not covered by the mini player while the player is minimized
+        playerViewModel.isMiniPlayerVisible.observe(this) { isMiniPlayerVisible ->
+            binding.fragment.updatePadding(
+                bottom = if (isMiniPlayerVisible) {
+                    resources.getDimensionPixelSize(R.dimen.mini_player_bottom_padding)
+                } else {
+                    0
+                }
+            )
         }
 
         // Check update automatically

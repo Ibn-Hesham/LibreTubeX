@@ -4,12 +4,8 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
-import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,7 +17,6 @@ import com.github.libretube.db.DatabaseHolder.Database
 import com.github.libretube.db.obj.WatchHistoryItem
 import com.github.libretube.enums.WatchHistoryStatus
 import com.github.libretube.extensions.ceilHalf
-import com.github.libretube.extensions.dpToPx
 import com.github.libretube.extensions.setOnDismissListener
 import com.github.libretube.extensions.toastFromMainDispatcher
 import com.github.libretube.helpers.NavigationHelper
@@ -31,7 +26,6 @@ import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.adapters.WatchHistoryAdapter
 import com.github.libretube.ui.base.DynamicLayoutManagerFragment
 import com.github.libretube.ui.extensions.addOnBottomReachedListener
-import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.models.WatchHistoryModel
 import com.github.libretube.util.PlayingQueue
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -43,7 +37,6 @@ class WatchHistoryFragment : DynamicLayoutManagerFragment(R.layout.fragment_watc
     private var _binding: FragmentWatchHistoryBinding? = null
     private val binding get() = _binding!!
 
-    private val commonPlayerViewModel: CommonPlayerViewModel by activityViewModels()
     private var recyclerViewState: Parcelable? = null
 
     private val viewModel: WatchHistoryModel by viewModels()
@@ -62,13 +55,6 @@ class WatchHistoryFragment : DynamicLayoutManagerFragment(R.layout.fragment_watc
             viewModel::getWatchPosition,
             viewModel::onWatchStatusChanged
         )
-
-        commonPlayerViewModel.isMiniPlayerVisible.observe(viewLifecycleOwner) { isMiniPlayerVisible ->
-            _binding?.watchHistoryRecView?.updatePadding(bottom = if (isMiniPlayerVisible) 64f.dpToPx() else 0)
-            _binding?.playAll?.updateLayoutParams<MarginLayoutParams> {
-                bottomMargin = (if (isMiniPlayerVisible) 64f else 16f).dpToPx()
-            }
-        }
 
         binding.watchHistoryRecView.setOnDismissListener { position ->
             val item = viewModel.filteredWatchHistory.value?.getOrNull(position)

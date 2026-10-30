@@ -6,18 +6,21 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import com.github.libretube.R
 import com.github.libretube.constants.IntentData
 import com.github.libretube.databinding.ActivityNointernetBinding
 import com.github.libretube.helpers.NavigationHelper
 import com.github.libretube.ui.extensions.onSystemInsets
+import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.models.DownloadsViewModel
 
 class NoInternetActivity : AbstractPlayerHostActivity() {
     private lateinit var binding: ActivityNointernetBinding
 
     private val downloadsModel: DownloadsViewModel by viewModels()
+    private val playerViewModel: CommonPlayerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +38,18 @@ class NoInternetActivity : AbstractPlayerHostActivity() {
             with (binding.container) {
                 setPadding(paddingLeft, paddingTop, paddingRight, systemBarInsets.bottom)
             }
+        }
+
+        // reserve space at the bottom of the fragment container so that the content
+        // of the pages is not covered by the mini player while the player is minimized
+        playerViewModel.isMiniPlayerVisible.observe(this) { isMiniPlayerVisible ->
+            binding.fragment.updatePadding(
+                bottom = if (isMiniPlayerVisible) {
+                    resources.getDimensionPixelSize(R.dimen.mini_player_bottom_padding)
+                } else {
+                    0
+                }
+            )
         }
     }
 

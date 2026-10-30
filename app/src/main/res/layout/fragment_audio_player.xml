@@ -305,7 +305,7 @@
     <LinearLayout
         android:id="@+id/miniPlayerControls"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="@dimen/mini_player_height"
         android:alpha="0"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/audio_player_container"

@@ -3,12 +3,9 @@ package com.github.libretube.ui.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup.MarginLayoutParams
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,7 +21,6 @@ import com.github.libretube.databinding.FragmentLibraryBinding
 import com.github.libretube.enums.PlaylistType
 import com.github.libretube.extensions.TAG
 import com.github.libretube.extensions.ceilHalf
-import com.github.libretube.extensions.dpToPx
 import com.github.libretube.extensions.toastFromMainDispatcher
 import com.github.libretube.helpers.NavBarHelper
 import com.github.libretube.helpers.PreferenceHelper
@@ -34,7 +30,6 @@ import com.github.libretube.ui.adapters.PlaylistsAdapter
 import com.github.libretube.ui.base.DynamicLayoutManagerFragment
 import com.github.libretube.ui.dialogs.CreatePlaylistDialog
 import com.github.libretube.ui.dialogs.CreatePlaylistDialog.Companion.CREATE_PLAYLIST_DIALOG_REQUEST_KEY
-import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.sheets.BaseBottomSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,8 +38,6 @@ import kotlinx.coroutines.withContext
 class LibraryFragment : DynamicLayoutManagerFragment(R.layout.fragment_library) {
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
-
-    private val commonPlayerViewModel: CommonPlayerViewModel by activityViewModels()
 
     private val playlistsAdapter = PlaylistsAdapter(PlaylistType.PRIVATE)
     private val playlistBookmarkAdapter = PlaylistBookmarkAdapter()
@@ -69,11 +62,6 @@ class LibraryFragment : DynamicLayoutManagerFragment(R.layout.fragment_library) 
             }
         })
         binding.playlistRecView.adapter = playlistsAdapter
-
-        // listen for the mini player state changing
-        commonPlayerViewModel.isMiniPlayerVisible.observe(viewLifecycleOwner) {
-            updateFABMargin(it)
-        }
 
         // hide watch history button of history disabled
         val watchHistoryEnabled =
@@ -161,13 +149,6 @@ class LibraryFragment : DynamicLayoutManagerFragment(R.layout.fragment_library) 
             if (bookmarks.isNotEmpty()) {
                 playlistBookmarkAdapter.submitList(bookmarks)
             }
-        }
-    }
-
-    private fun updateFABMargin(isMiniPlayerVisible: Boolean) {
-        // optimize CreatePlaylistFab bottom margin if miniPlayer active
-        binding.createPlaylist.updateLayoutParams<MarginLayoutParams> {
-            bottomMargin = (if (isMiniPlayerVisible) 64f else 16f).dpToPx()
         }
     }
 

@@ -12,7 +12,6 @@ import androidx.core.text.parseAsHtml
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
-import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -51,7 +50,6 @@ import com.github.libretube.ui.adapters.PlaylistItem
 import com.github.libretube.ui.base.BaseActivity
 import com.github.libretube.ui.base.DynamicLayoutManagerFragment
 import com.github.libretube.ui.extensions.addOnBottomReachedListener
-import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.models.PlaylistViewModel
 import com.github.libretube.ui.sheets.BaseBottomSheet
 import com.github.libretube.ui.sheets.PlaylistOptionsBottomSheet
@@ -90,7 +88,6 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
     private var reorderHandlerAttached = false
 
     // view models
-    private val commonPlayerViewModel: CommonPlayerViewModel by activityViewModels()
     private val playlistViewModel: PlaylistViewModel by activityViewModels()
     private var selectedSortOrder = PreferenceHelper.getInt(PreferenceKeys.PLAYLIST_SORT_ORDER, 0)
         set(value) {
@@ -126,10 +123,6 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
             withContext(Dispatchers.Main) {
                 updateBookmarkRes()
             }
-        }
-
-        commonPlayerViewModel.isMiniPlayerVisible.observe(viewLifecycleOwner) {
-            binding.playlistRecView.updatePadding(bottom = if (it) 64f.dpToPx() else 0)
         }
 
         // manually restore the recyclerview state due to https://github.com/material-components/material-components-android/issues/3473
