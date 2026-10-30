@@ -36,6 +36,7 @@ object IntentData {
     const val logoutTask = "logoutTask"
     const val color = "color"
     const val streamItem = "streamItem"
+    const val dismissableSection = "dismissableSection"
     const val url = "url"
     const val videoStats = "videoStats"
     const val bitmapUrl = "bitmapUrl"

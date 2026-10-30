@@ -16,6 +16,7 @@ import com.github.libretube.db.obj.PlaylistBookmark
 import com.github.libretube.enums.WatchHistoryStatus
 import com.github.libretube.extensions.runSafely
 import com.github.libretube.extensions.updateIfChanged
+import com.github.libretube.helpers.DismissHelper
 import com.github.libretube.helpers.PlayerHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.repo.FeedRefresh
@@ -143,8 +144,9 @@ class HomeViewModel : ViewModel() {
             )
         }.getOrElse { Pair(emptyList(), null) }
 
-        return DatabaseHelper
-            .filterUnwatched(videos.map { it.video })
+        return DismissHelper.filterContinueWatching(videos)
+            .map { it.video }
+            .let { DatabaseHelper.filterUnwatched(it) }
     }
 
     private suspend fun tryLoadFeed(subscriptionsViewModel: SubscriptionsViewModel): List<StreamItem> {
@@ -155,7 +157,10 @@ class HomeViewModel : ViewModel() {
             }
         }
 
-        return DatabaseHelper.filterByStreamTypeAndWatchPosition(feed, hideWatched, showUpcoming)
+        return DismissHelper.filterDismissedFromFeed(feed)
+            .let {
+                DatabaseHelper.filterByStreamTypeAndWatchPosition(it, hideWatched, showUpcoming)
+            }
     }
 
     companion object {

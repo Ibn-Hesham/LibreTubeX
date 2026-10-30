@@ -430,6 +430,8 @@
     <string name="upvote">Up</string>
     <string name="downvote">Down</string>
     <string name="undo">Undo</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="video_dismissed">Video dismissed</string>
     <string name="segment">Segment</string>
     <string name="download_playlist">Download playlist</string>
     <string name="download_playlist_note">Please select the maximum audio/video quality to download. Captions will only be downloaded if available.</string>

@@ -2,17 +2,20 @@ package com.github.libretube.ui.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.ListAdapter
+import com.github.libretube.R
 import com.github.libretube.api.SponsorBlockLabelHelper
 import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.constants.IntentData
 import com.github.libretube.databinding.AllCaughtUpRowBinding
 import com.github.libretube.databinding.TrendingRowBinding
+import com.github.libretube.enums.DismissableSection
 import com.github.libretube.extensions.dpToPx
 import com.github.libretube.extensions.toID
 import com.github.libretube.helpers.ImageHelper
@@ -27,27 +30,62 @@ import com.github.libretube.ui.sheets.VideoOptionsBottomSheet
 import com.github.libretube.ui.viewholders.VideoCardsViewHolder
 import com.github.libretube.util.DeArrowUtil
 import com.github.libretube.util.TextUtils
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class VideoCardsAdapter(private val columnWidthDp: Float? = null) :
-    ListAdapter<StreamItem, VideoCardsViewHolder>(DiffUtilItemCallback()) {
+class VideoCardsAdapter(
+    private val columnWidthDp: Float? = null,
+    private val dismissableSection: DismissableSection? = null
+) : ListAdapter<StreamItem, VideoCardsViewHolder>(DiffUtilItemCallback()) {
 
     override fun getItemViewType(position: Int): Int {
         return if (currentList[position].type == CAUGHT_UP_STREAM_TYPE) CAUGHT_UP_TYPE else NORMAL_TYPE
     }
 
-    fun removeItemById(videoId: String) {
+    /**
+     * Removes the video from the list and returns its previous position together
+     * with the item itself, so that it can be restored e.g. when undoing a dismissal.
+     */
+    fun removeItemById(videoId: String): Pair<Int, StreamItem>? {
         val index = currentList.indexOfFirst {
             it.url?.toID() == videoId
-        }.takeIf { it > 0 } ?: return
+        }
+        if (index == -1) return null
+        val item = currentList[index]
+
         val updatedList = currentList.toMutableList().also {
             it.removeAt(index)
         }
 
         submitList(updatedList)
+
+        return index to item
+    }
+
+    fun addItemAt(index: Int, item: StreamItem) {
+        submitList(
+            currentList.toMutableList().also {
+                it.add(index.coerceAtMost(it.size), item)
+            }
+        )
+    }
+
+    /**
+     * Removes a video and shows a snackbar that restores it and invokes [onUndo]
+     * when the user taps undo.
+     */
+    fun removeItemWithUndo(videoId: String, anchorView: View, onUndo: () -> Unit) {
+        val removedItem = removeItemById(videoId) ?: return
+
+        Snackbar.make(anchorView, R.string.video_dismissed, Snackbar.LENGTH_LONG)
+            .setAction(R.string.undo) {
+                onUndo()
+                addItemAt(removedItem.first, removedItem.second)
+            }
+            .show()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoCardsViewHolder {
@@ -122,7 +160,11 @@ class VideoCardsAdapter(private val columnWidthDp: Float? = null) :
                     notifyItemChanged(position)
                 }
                 val sheet = VideoOptionsBottomSheet()
-                sheet.arguments = bundleOf(IntentData.streamItem to video)
+                sheet.arguments = bundleOf(IntentData.streamItem to video).apply {
+                    dismissableSection?.let {
+                        putString(IntentData.dismissableSection, it.name)
+                    }
+                }
                 sheet.show(fragmentManager, VideoCardsAdapter::class.java.name)
                 true
             }

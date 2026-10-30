@@ -18,8 +18,10 @@ import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.databinding.FragmentSubscriptionsBinding
 import com.github.libretube.db.DatabaseHelper
+import com.github.libretube.enums.DismissableSection
 import com.github.libretube.extensions.toID
 import com.github.libretube.extensions.toastFromMainDispatcher
+import com.github.libretube.helpers.DismissHelper
 import com.github.libretube.helpers.NavigationHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.obj.SelectableOption
@@ -33,6 +35,7 @@ import com.github.libretube.ui.sheets.ChannelGroupsSheet
 import com.github.libretube.ui.sheets.FilterSortBottomSheet
 import com.github.libretube.ui.sheets.FilterSortBottomSheet.Companion.FILTER_SORT_REQUEST_KEY
 import com.github.libretube.ui.sheets.SubscriptionsBottomSheet
+import com.github.libretube.ui.sheets.VideoOptionsBottomSheet
 import com.github.libretube.util.PlayingQueue
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +54,7 @@ class SubscriptionsFragment : DynamicLayoutManagerFragment(R.layout.fragment_sub
 
     private var isAppBarFullyExpanded = true
 
-    private var feedAdapter = VideoCardsAdapter()
+    private var feedAdapter = VideoCardsAdapter(dismissableSection = DismissableSection.FEED)
     private var selectedSortOrder = PreferenceHelper.getInt(PreferenceKeys.FEED_SORT_ORDER, 0)
         set(value) {
             PreferenceHelper.putInt(PreferenceKeys.FEED_SORT_ORDER, value)
@@ -84,6 +87,19 @@ class SubscriptionsFragment : DynamicLayoutManagerFragment(R.layout.fragment_sub
         setupSortAndFilter()
 
         binding.subFeed.adapter = feedAdapter
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            VideoOptionsBottomSheet.DISMISS_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            if (result.getString(IntentData.dismissableSection) != DismissableSection.FEED.name) {
+                return@setFragmentResultListener
+            }
+            val videoId = result.getString(IntentData.videoId) ?: return@setFragmentResultListener
+
+            DismissHelper.dismissFromFeed(videoId)
+            removeDismissedVideo(videoId)
+        }
 
         // Check if the AppBarLayout is fully expanded
         binding.subscriptionsAppBar.addOnOffsetChangedListener { _, verticalOffset ->
@@ -245,7 +261,7 @@ class SubscriptionsFragment : DynamicLayoutManagerFragment(R.layout.fragment_sub
     }
 
     private suspend fun playByGroup(groupIndex: Int) {
-        val streams = viewModel.videoFeed.value.orEmpty()
+        val streams = DismissHelper.filterDismissedFromFeed(viewModel.videoFeed.value.orEmpty())
             .filterByGroup(groupIndex)
             .let {
                 DatabaseHelper.filterByStreamTypeAndWatchPosition(it, hideWatched, showUpcoming)
@@ -342,7 +358,7 @@ class SubscriptionsFragment : DynamicLayoutManagerFragment(R.layout.fragment_sub
         val binding = _binding ?: return
         val videoFeed = viewModel.videoFeed.value ?: return
 
-        val feed = videoFeed
+        val feed = DismissHelper.filterDismissedFromFeed(videoFeed)
             .filterByGroup(selectedFilterGroup)
             .let {
                 DatabaseHelper.filterByStreamTypeAndWatchPosition(it, hideWatched, showUpcoming)
@@ -393,6 +409,13 @@ class SubscriptionsFragment : DynamicLayoutManagerFragment(R.layout.fragment_sub
 
     fun removeItem(videoId: String) {
         feedAdapter.removeItemById(videoId)
+    }
+
+    private fun removeDismissedVideo(videoId: String) {
+        val binding = _binding ?: return
+        feedAdapter.removeItemWithUndo(videoId, binding.root) {
+            DismissHelper.undoFeedDismissal(videoId)
+        }
     }
 
     companion object {

@@ -23,6 +23,7 @@ import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.extensions.TAG
 import com.github.libretube.extensions.toID
+import com.github.libretube.helpers.DismissHelper
 import com.github.libretube.helpers.ImageHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.repo.FeedRefresh
@@ -97,6 +98,7 @@ class NotificationWorker(appContext: Context, parameters: WorkerParameters) :
         val channelsToIgnore = PreferenceHelper.getIgnorableNotificationChannels()
         val enableShortsNotification =
             PreferenceHelper.getBoolean(PreferenceKeys.SHORTS_NOTIFICATIONS, false)
+        val dismissedVideoIds = DismissHelper.getDismissedFeedVideoIds()
 
         val channelGroups = videoFeed.asSequence()
             // filter the new videos until the last seen video in the feed
@@ -105,6 +107,8 @@ class NotificationWorker(appContext: Context, parameters: WorkerParameters) :
             .filter { enableShortsNotification || !it.isShort }
             // hide for notifications unsubscribed channels
             .filter { it.uploaderUrl!!.toID() !in channelsToIgnore }
+            // don't notify about videos dismissed from the feed
+            .filter { it.url!!.toID() !in dismissedVideoIds }
             // group the new streams by the uploader
             .groupBy { it.uploaderUrl!!.toID() }
 

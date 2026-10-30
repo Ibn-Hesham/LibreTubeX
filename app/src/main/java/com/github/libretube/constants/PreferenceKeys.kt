@@ -87,6 +87,8 @@ object PreferenceKeys {
     const val CHECKING_FREQUENCY = "checking_frequency"
     const val REQUIRED_NETWORK = "required_network"
     const val IGNORED_NOTIFICATION_CHANNELS = "ignored_notification_channels"
+    const val DISMISSED_FROM_FEED = "dismissed_from_feed"
+    const val DISMISSED_FROM_CONTINUE_WATCHING = "dismissed_from_continue_watching"
     const val NOTIFICATION_TIME_ENABLED = "notification_time"
     const val NOTIFICATION_START_TIME = "notification_start_time"
     const val NOTIFICATION_END_TIME = "notification_end_time"

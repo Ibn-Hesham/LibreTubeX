@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.github.libretube.R
@@ -14,11 +15,15 @@ import com.github.libretube.api.MediaServiceRepository
 import com.github.libretube.api.TrendingCategory
 import com.github.libretube.api.obj.Playlists
 import com.github.libretube.api.obj.StreamItem
+import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.constants.PreferenceKeys.HOME_TAB_CONTENT
 import com.github.libretube.databinding.FragmentHomeBinding
+import com.github.libretube.db.DatabaseHelper
 import com.github.libretube.db.obj.PlaylistBookmark
+import com.github.libretube.enums.DismissableSection
 import com.github.libretube.enums.PlaylistType
+import com.github.libretube.helpers.DismissHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.ui.activities.SettingsActivity
 import com.github.libretube.ui.adapters.CarouselPlaylist
@@ -27,11 +32,15 @@ import com.github.libretube.ui.adapters.VideoCardsAdapter
 import com.github.libretube.ui.models.HomeViewModel
 import com.github.libretube.ui.models.SubscriptionsViewModel
 import com.github.libretube.ui.models.TrendsViewModel
+import com.github.libretube.ui.sheets.VideoOptionsBottomSheet
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.UncontainedCarouselStrategy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -43,8 +52,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val trendsViewModel: TrendsViewModel by activityViewModels()
 
     private val trendingAdapter = VideoCardsAdapter()
-    private val feedAdapter = VideoCardsAdapter(columnWidthDp = 250f)
-    private val watchingAdapter = VideoCardsAdapter(columnWidthDp = 250f)
+    private val feedAdapter = VideoCardsAdapter(
+        columnWidthDp = 250f,
+        dismissableSection = DismissableSection.FEED
+    )
+    private val watchingAdapter = VideoCardsAdapter(
+        columnWidthDp = 250f,
+        dismissableSection = DismissableSection.CONTINUE_WATCHING
+    )
     private val bookmarkAdapter = CarouselPlaylistAdapter(PlaylistType.PUBLIC)
     private val playlistAdapter = CarouselPlaylistAdapter(PlaylistType.PRIVATE)
 
@@ -76,6 +91,39 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         })
         binding.watchingRV.adapter = watchingAdapter
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            VideoOptionsBottomSheet.DISMISS_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            val videoId = result.getString(IntentData.videoId) ?: return@setFragmentResultListener
+            val root = _binding?.root ?: return@setFragmentResultListener
+
+            when (result.getString(IntentData.dismissableSection)) {
+                DismissableSection.FEED.name -> {
+                    DismissHelper.dismissFromFeed(videoId)
+                    feedAdapter.removeItemWithUndo(videoId, root) {
+                        DismissHelper.undoFeedDismissal(videoId)
+                    }
+                }
+
+                DismissableSection.CONTINUE_WATCHING.name -> {
+                    // remember the current watch position, the video returns to the
+                    // section once the position changed again
+                    lifecycleScope.launch {
+                        val positionMillis = withContext(Dispatchers.IO) {
+                            DatabaseHelper.getWatchPosition(videoId)
+                        }
+                        DismissHelper.dismissFromContinueWatching(videoId, positionMillis)
+
+                        if (_binding == null) return@launch
+                        watchingAdapter.removeItemWithUndo(videoId, root) {
+                            DismissHelper.undoContinueWatchingDismissal(videoId)
+                        }
+                    }
+                }
+            }
+        }
 
         with(homeViewModel) {
             trending.observe(viewLifecycleOwner, ::showTrending)

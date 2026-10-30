@@ -11,6 +11,7 @@ import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.api.obj.WatchHistoryEntryMetadata
 import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
+import com.github.libretube.enums.DismissableSection
 import com.github.libretube.enums.ShareObjectType
 import com.github.libretube.extensions.parcelable
 import com.github.libretube.extensions.toID
@@ -39,6 +40,7 @@ import kotlinx.coroutines.withContext
  */
 class VideoOptionsBottomSheet : BaseBottomSheet() {
     private lateinit var streamItem: StreamItem
+    private var dismissableSection: DismissableSection? = null
 
     private suspend fun onOptionSelect(
         @StringRes option: Int,
@@ -139,12 +141,27 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
                 }
                 setFragmentResult(VIDEO_OPTIONS_SHEET_REQUEST_KEY, bundleOf(IS_VIDEO_WATCHED to false))
             }
+
+            R.string.dismiss -> {
+                // the fragment owning the section persists the dismissal and removes
+                // the video from its list
+                val section = dismissableSection ?: return
+                setFragmentResult(
+                    DISMISS_REQUEST_KEY,
+                    bundleOf(
+                        IntentData.videoId to videoId,
+                        IntentData.dismissableSection to section.name
+                    )
+                )
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         streamItem = arguments?.parcelable(IntentData.streamItem)!!
         val playlistId = arguments?.getString(IntentData.playlistId)
+        dismissableSection = arguments?.getString(IntentData.dismissableSection)
+            ?.let { name -> DismissableSection.entries.firstOrNull { it.name == name } }
 
         val videoId = streamItem.url?.toID() ?: return
 
@@ -154,6 +171,7 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
             add(R.string.addToPlaylist)
             if (!streamItem.isLive) add(R.string.download)
             add(R.string.share)
+            if (dismissableSection != null) add(R.string.dismiss)
         }
 
         setSimpleItems(optionsList.map { getString(it) }) { which ->
@@ -214,5 +232,6 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
     companion object {
         const val VIDEO_OPTIONS_SHEET_REQUEST_KEY = "video_options_sheet_request_key"
         const val IS_VIDEO_WATCHED = "isVideoWatched"
+        const val DISMISS_REQUEST_KEY = "dismiss_request_key"
     }
 }
