@@ -13,12 +13,15 @@ The latest build is always at [releases/latest](https://github.com/Ibn-Hesham/Li
 
 ## Extra features
 
-- **Offline playlist bookmarks** — bookmarked playlists are cached, so they can be opened (and their downloaded videos played) without internet
+- **Dismissible feed items** — long-press a video in the subscriptions feed or the home sections to hide it (with undo); dismissed feed videos are also skipped by new-video notifications
 - **Reorderable local playlists** — move videos to any position by dragging them around
+- **Offline playlist bookmarks** — bookmarked playlists are cached, so they can be opened (and their downloaded videos played) without internet
 - **Named download notifications** — downloads show video title and channel instead of cryptic file names
 - **Resume from the notification** — paused downloads offer a working resume action right in the notification
 - **Self-healing thumbnails** — deleting a download no longer leaves grayed-out thumbnails in the history
-- **Classic icon theme** — the original LibreTube icon is available as an app icon theme
+- **Autoplay-respecting queue** — with autoplay off, the queue stops at the end of each track instead of auto-advancing (manual skipping is unaffected)
+- **Mini player clearance** — pages lift their content above the mini player bar, so the last row is never hidden underneath it
+- **Downloaded badges** — video cards show a badge when the video is already downloaded
 
 ## Credits
 
