@@ -239,7 +239,6 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
 
         val onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                binding.audioPlayerContainer.isClickable = false
                 binding.playerMotionLayout.transitionToEnd()
                 activity.minimizePlayerContainerLayout()
                 activity.requestOrientationChange()
