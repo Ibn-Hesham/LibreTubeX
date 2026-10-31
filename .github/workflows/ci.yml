@@ -31,10 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: gradle/actions/wrapper-validation@v5
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -47,27 +43,17 @@ jobs:
         run: |
           ./gradlew assembleDebug
 
-      # re-sign the debug APK with the release key when the secrets are
+      # re-sign the debug APK with the fixed key when the secrets are
       # configured, so the artifact installs as an update over previous CI
-      # builds; apksigner comes from the build-tools preinstalled on the runner
+      # builds; without them the artifact stays debug-signed (the `if` is
+      # on the job-level SIGNING_KEY env, as a step cannot see its own env)
       - name: Sign Apk
         if: env.SIGNING_KEY != ''
         env:
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
-          printf '%s' "$SIGNING_KEY" | base64 -d > ci-debug.keystore
-          apksigner="$(ls -d "${ANDROID_SDK_ROOT:-$ANDROID_HOME}"/build-tools/*/apksigner | sort -V | tail -1)"
-          "$apksigner" sign \
-            --ks ci-debug.keystore \
-            --ks-key-alias "$KEY_ALIAS" \
-            --ks-pass "pass:$KEYSTORE_PASSWORD" \
-            --key-pass "pass:$KEY_PASSWORD" \
-            --out app/build/outputs/apk/debug/app-debug-resigned.apk \
-            app/build/outputs/apk/debug/app-debug.apk
-          mv app/build/outputs/apk/debug/app-debug-resigned.apk \
-            app/build/outputs/apk/debug/app-debug.apk
+        run: .github/scripts/sign-apk.sh app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v6
@@ -82,7 +68,11 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
+      # full history + tags: the release body lists the commit summaries
+      # since the previous release tag
       - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK
         uses: actions/setup-java@v5
@@ -119,16 +109,64 @@ jobs:
             printf 'keyPassword=%s\n' "${KEY_PASSWORD//\\/\\\\}"
           } > keystore.properties
 
-      - name: Build release APK
-        run: ./gradlew assembleRelease --no-daemon
+      # the debug variant ships in the release as a debugging aid; it is a
+      # separate app (the .debug applicationId suffix) signed with the same
+      # fixed key as the debug workflow artifacts, so it updates over them
+      - name: Build APKs
+        run: ./gradlew assembleRelease assembleDebug --no-daemon
 
-      - name: Rename APK
-        run: mv app/build/outputs/apk/release/app-release.apk libretubex.apk
+      - name: Sign debug APK
+        env:
+          SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: .github/scripts/sign-apk.sh app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Rename APKs
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk libretubex.apk
+          mv app/build/outputs/apk/debug/app-debug.apk libretubex-debug.apk
 
       - name: Get Date and Time
         run: |
           echo "TIME=$(date -u +'%T')" >> $GITHUB_ENV
           echo "DATE=$(date -u +'%d-%m-%Y')" >> $GITHUB_ENV
+          echo "SHA_SHORT=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      # collect the commit summaries since the previous release for the
+      # release body; gh release list yields the newest existing release's
+      # tag (the current release does not exist yet). Upstream tags copied
+      # into the fork by cloning are ignored, as they never had releases
+      # here and could otherwise hide commits. Without any previous release,
+      # fall back to the 15 most recent commits.
+      - name: Collect commit summaries
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch --tags --force origin
+          prev_tag=$(gh release list --limit 1 --exclude-drafts --exclude-pre-releases --json tagName --jq '.[0].tagName // empty')
+          if [ -n "$prev_tag" ]; then
+            echo "::notice::listing commits since $prev_tag"
+            git log --format='- %s' "${prev_tag}..HEAD" > "$RUNNER_TEMP/commits.md"
+            # cap the list so a big upstream merge cannot blow past the
+            # per-env-var size limit (COMMITS becomes an env var) or bury
+            # the release page; subjects are single lines, so lines == commits
+            count=$(wc -l < "$RUNNER_TEMP/commits.md")
+            if [ "$count" -gt 500 ]; then
+              head -n 500 "$RUNNER_TEMP/commits.md" > "$RUNNER_TEMP/commits-capped.md"
+              echo "- and $((count - 500)) more commits (list truncated)" >> "$RUNNER_TEMP/commits-capped.md"
+              mv "$RUNNER_TEMP/commits-capped.md" "$RUNNER_TEMP/commits.md"
+            fi
+          else
+            echo "::notice::no previous release found, listing the 15 most recent commits"
+            git log -15 --format='- %s' > "$RUNNER_TEMP/commits.md"
+          fi
+          {
+            echo "COMMITS<<COMMITLIST_EOF"
+            cat "$RUNNER_TEMP/commits.md"
+            echo "COMMITLIST_EOF"
+          } >> "$GITHUB_ENV"
 
       # each run gets its own release, so previous APKs stay available for
       # downgrades; releases/latest follows the makeLatest flag, not dates
@@ -138,12 +176,16 @@ jobs:
           token: ${{ github.token }}
           tag: v${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}
           makeLatest: true
-          artifacts: libretubex.apk
+          artifacts: |
+            libretubex.apk
+            libretubex-debug.apk
           name: LibreTubeX v${{ env.VERSION_NAME }}.${{ env.VERSION_CODE }}
           body: |
-            Automatic release build from ${{ env.DATE }} ${{ env.TIME }} UTC (commit ${{ github.sha }})
+            Automatic release build from ${{ env.DATE }} ${{ env.TIME }} UTC (commit ${{ env.SHA_SHORT }})
 
-            Version code ${{ env.VERSION_CODE }} — matches the version shown in the app under Settings → About.
+            Changes since the previous release:
+
+            ${{ env.COMMITS }}
 
       # keep the 10 newest per-build releases; manually tagged releases
       # (two-part tags, e.g. v33.0) are never pruned. Releases created with
