@@ -104,7 +104,8 @@ class YoutubeHlsPlaylistParser : ParsingLoadable.Parser<HlsPlaylist> {
             hlsMultivariantPlaylist.muxedCaptionFormats,
             hlsMultivariantPlaylist.hasIndependentSegments,
             hlsMultivariantPlaylist.variableDefinitions,
-            hlsMultivariantPlaylist.sessionKeyDrmInitData
+            hlsMultivariantPlaylist.sessionKeyDrmInitData,
+            hlsMultivariantPlaylist.contentSteeringInfo
         )
     }
 
@@ -156,6 +157,7 @@ class YoutubeHlsPlaylistParser : ParsingLoadable.Parser<HlsPlaylist> {
                 ),
                 it.groupId,
                 it.name,
+                it.stableRenditionId,
             )
         }
     }

@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.CallSuper
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.core.app.ServiceCompat
 import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
@@ -22,6 +23,7 @@ import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import com.github.libretube.R
@@ -62,6 +64,16 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
 
     var isTransitioning = false
         private set
+
+    /**
+     * Whether the service teardown has been scheduled already. [onDestroy] is called
+     * manually from several places (e.g. the stop button in the notification) and by the
+     * system, so it must only run its cleanup and `super.onDestroy()` once: since media3
+     * 1.11 [MediaSessionService] extends [androidx.lifecycle.LifecycleService], a second
+     * `super.onDestroy()` call makes the lifecycle registry throw an
+     * IllegalStateException as it is already destroyed.
+     */
+    private var isTearingDown = false
 
     val handler = Handler(Looper.getMainLooper())
 
@@ -104,6 +116,16 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
                     isTransitioning = false
                 }
             }
+        }
+    }
+
+    private val serviceListener = object : MediaSessionService.Listener {
+        // media3 swallows the ForegroundServiceStartNotAllowedException thrown when the
+        // service tries to re-enter the foreground from the background (e.g. when the next
+        // queued download starts playing); keep that event observable via logcat
+        @RequiresApi(31)
+        override fun onForegroundServiceStartNotAllowedException() {
+            Log.w(TAG(), "starting the foreground service for the player notification was not allowed")
         }
     }
 
@@ -356,6 +378,8 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
     override fun onCreate() {
         super.onCreate()
 
+        setListener(serviceListener)
+
         notificationProvider = NowPlayingNotification(this)
         setMediaNotificationProvider(notificationProvider!!)
 
@@ -478,6 +502,9 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
     }
 
     override fun onDestroy() {
+        if (isTearingDown) return
+        isTearingDown = true
+
         // wait for a short time before killing the mediaSession
         // as the playerController must be released before we finish the session
         // otherwise there would be a
