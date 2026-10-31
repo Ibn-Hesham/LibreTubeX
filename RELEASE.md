@@ -2,12 +2,12 @@
 Every push to `main` gets its own release. Tagged releases are optional milestones.
 
 ## Prerequirements
-- The following actions secrets have to be set (see [ilharp/sign-android-release](https://github.com/ilharp/sign-android-release)):
+- The following actions secrets have to be set:
   - `ANDROID_RELEASE_SIGNING_KEY`
   - `ANDROID_RELEASE_KEY_ALIAS`
   - `ANDROID_RELEASE_KEYSTORE_PASSWORD`
   - `ANDROID_RELEASE_KEY_PASSWORD`
-- If you don't have a keystore yet, create one, e.g. via `keytool -genkey -v -keystore release.keystore -alias libretubex -keyalg RSA -keysize 2048 -validity 10000`, and store it base64-encoded (`base64 -w0 release.keystore`) as the `ANDROID_RELEASE_SIGNING_KEY` secret.
+- If you don't have a keystore yet, create one, e.g. via `keytool -genkey -v -keystore release.keystore -alias libretubex -keyalg RSA -keysize 2048 -validity 10000`, and store it base64-encoded (`base64 -w0 release.keystore`) as the `ANDROID_RELEASE_SIGNING_KEY` secret. In CI, the workflows decode the keystore and write a `keystore.properties` so Gradle signs the release APK directly (see `app/build.gradle.kts`); keep the passwords ASCII-only, as passwords with backslashes or non-ASCII characters are not supported.
 - Additionally, GitHub actions workflows must be configured to have "Read and write permissions" in the repository's settings.
 
 ## Automatic releases

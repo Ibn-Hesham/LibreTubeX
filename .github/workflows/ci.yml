@@ -24,6 +24,10 @@ concurrency:
 jobs:
   debug-builds:
     runs-on: ubuntu-latest
+    env:
+      # job-level so the Sign Apk step's `if` can see it (step env is not);
+      # when unset the artifact is left debug-signed instead of failing
+      SIGNING_KEY: ${{ secrets.ANDROID_SIGNING_KEY }}
     steps:
       - uses: actions/checkout@v6
       - uses: gradle/actions/wrapper-validation@v5
@@ -43,29 +47,40 @@ jobs:
         run: |
           ./gradlew assembleDebug
 
+      # re-sign the debug APK with the release key when the secrets are
+      # configured, so the artifact installs as an update over previous CI
+      # builds; apksigner comes from the build-tools preinstalled on the runner
       - name: Sign Apk
-        continue-on-error: true
-        id: sign_apk
-        uses: ilharp/sign-android-release@v2
-        with:
-          releaseDir: app/build/outputs/apk/debug
-          signingKey: ${{ secrets.ANDROID_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        if: env.SIGNING_KEY != ''
+        env:
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          printf '%s' "$SIGNING_KEY" | base64 -d > ci-debug.keystore
+          apksigner="$(ls -d "${ANDROID_SDK_ROOT:-$ANDROID_HOME}"/build-tools/*/apksigner | sort -V | tail -1)"
+          "$apksigner" sign \
+            --ks ci-debug.keystore \
+            --ks-key-alias "$KEY_ALIAS" \
+            --ks-pass "pass:$KEYSTORE_PASSWORD" \
+            --key-pass "pass:$KEY_PASSWORD" \
+            --out app/build/outputs/apk/debug/app-debug-resigned.apk \
+            app/build/outputs/apk/debug/app-debug.apk
+          mv app/build/outputs/apk/debug/app-debug-resigned.apk \
+            app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v6
         with:
           name: app
-          path: app/build/outputs/apk/debug/app-debug-signed.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
 
   release:
     if: github.ref_name == 'main'
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    needs: debug-builds
     steps:
       - uses: actions/checkout@v6
 
@@ -81,21 +96,34 @@ jobs:
           echo "VERSION_CODE=$(( 72 + ${{ github.run_number }} ))" >> $GITHUB_ENV
           echo "VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts)" >> $GITHUB_ENV
 
+      # keystore.properties (read by app/build.gradle.kts) makes
+      # assembleRelease sign the APK itself; storeFile resolves relative
+      # to the app/ module, hence the keystore living in app/
+      - name: Set up release signing
+        env:
+          SIGNING_KEY: ${{ secrets.ANDROID_RELEASE_SIGNING_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: |
+          if [ -z "$SIGNING_KEY" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo "::error::the ANDROID_RELEASE_SIGNING_KEY/KEY_ALIAS/KEYSTORE_PASSWORD/KEY_PASSWORD secrets are not all configured"
+            exit 1
+          fi
+          printf '%s' "$SIGNING_KEY" | base64 -d > app/upload.keystore
+          # java.util.Properties consumes backslash escapes, so double them
+          {
+            printf 'storeFile=upload.keystore\n'
+            printf 'storePassword=%s\n' "${KEYSTORE_PASSWORD//\\/\\\\}"
+            printf 'keyAlias=%s\n' "${KEY_ALIAS//\\/\\\\}"
+            printf 'keyPassword=%s\n' "${KEY_PASSWORD//\\/\\\\}"
+          } > keystore.properties
+
       - name: Build release APK
         run: ./gradlew assembleRelease --no-daemon
 
-      - name: Sign APK
-        uses: ilharp/sign-android-release@v2
-        id: sign
-        with:
-          signingKey: ${{ secrets.ANDROID_RELEASE_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
-          buildToolsVersion: 35.0.0
-
       - name: Rename APK
-        run: mv "${{ steps.sign.outputs.signedFile }}" "libretubex.apk"
+        run: mv app/build/outputs/apk/release/app-release.apk libretubex.apk
 
       - name: Get Date and Time
         run: |

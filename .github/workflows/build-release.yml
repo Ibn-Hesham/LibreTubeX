@@ -22,18 +22,31 @@ jobs:
           java-version: "17"
           cache: "gradle"
 
+      # keystore.properties (read by app/build.gradle.kts) makes
+      # assembleRelease sign the APK itself; storeFile resolves relative
+      # to the app/ module, hence the keystore living in app/
+      - name: Set up release signing
+        env:
+          SIGNING_KEY: ${{ secrets.ANDROID_RELEASE_SIGNING_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
+        run: |
+          if [ -z "$SIGNING_KEY" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo "::error::the ANDROID_RELEASE_SIGNING_KEY/KEY_ALIAS/KEYSTORE_PASSWORD/KEY_PASSWORD secrets are not all configured"
+            exit 1
+          fi
+          printf '%s' "$SIGNING_KEY" | base64 -d > app/upload.keystore
+          # java.util.Properties consumes backslash escapes, so double them
+          {
+            printf 'storeFile=upload.keystore\n'
+            printf 'storePassword=%s\n' "${KEYSTORE_PASSWORD//\\/\\\\}"
+            printf 'keyAlias=%s\n' "${KEY_ALIAS//\\/\\\\}"
+            printf 'keyPassword=%s\n' "${KEY_PASSWORD//\\/\\\\}"
+          } > keystore.properties
+
       - name: Build APK
         run: ./gradlew assembleRelease --no-daemon
-
-      - name: Sign APK
-        uses: ilharp/sign-android-release@v2
-        id: sign
-        with:
-          signingKey: ${{ secrets.ANDROID_RELEASE_SIGNING_KEY }}
-          keyAlias: ${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
-          buildToolsVersion: 35.0.0
 
       - name: Create changelog
         id: changelog
@@ -53,7 +66,7 @@ jobs:
             
 
       - name: Rename apk file
-        run: mv "${{ steps.sign.outputs.signedFile }}" "app-release.apk"
+        run: mv app/build/outputs/apk/release/app-release.apk app-release.apk
 
       - name: Create release
         uses: softprops/action-gh-release@v2
