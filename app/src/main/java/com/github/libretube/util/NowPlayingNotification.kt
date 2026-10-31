@@ -59,6 +59,9 @@ class NowPlayingNotification(
         return nProvider.createNotification(mediaSession, customLayout, actionFactory, onNotificationChangedCallback)
     }
 
+    override fun getNotificationChannelInfo(): MediaNotification.Provider.NotificationChannelInfo =
+        nProvider.getNotificationChannelInfo()
+
     override fun handleCustomCommand(
         session: MediaSession,
         action: String,

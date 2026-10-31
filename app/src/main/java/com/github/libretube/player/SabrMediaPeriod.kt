@@ -294,6 +294,7 @@ class SabrMediaPeriod(
                 loadErrorHandlingPolicy,
                 mediaSourceEventDispatcher,
                 canReportInitialDiscontinuity,
+                C.TIME_UNSET,
                 null
             )
         return stream
