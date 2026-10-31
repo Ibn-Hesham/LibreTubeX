@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.KeyEvent
 import androidx.annotation.CallSuper
 import androidx.annotation.OptIn
+import androidx.annotation.RequiresApi
 import androidx.core.app.ServiceCompat
 import androidx.core.os.bundleOf
 import androidx.core.os.postDelayed
@@ -22,6 +23,7 @@ import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaLibraryService.MediaLibrarySession
 import androidx.media3.session.MediaSession
+import androidx.media3.session.MediaSessionService
 import androidx.media3.session.SessionCommand
 import androidx.media3.session.SessionResult
 import com.github.libretube.R
@@ -104,6 +106,16 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
                     isTransitioning = false
                 }
             }
+        }
+    }
+
+    private val serviceListener = object : MediaSessionService.Listener {
+        // media3 swallows the ForegroundServiceStartNotAllowedException thrown when the
+        // service tries to re-enter the foreground from the background (e.g. when the next
+        // queued download starts playing); keep that event observable via logcat
+        @RequiresApi(31)
+        override fun onForegroundServiceStartNotAllowedException() {
+            Log.w(TAG(), "starting the foreground service for the player notification was not allowed")
         }
     }
 
@@ -355,6 +367,8 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
 
     override fun onCreate() {
         super.onCreate()
+
+        setListener(serviceListener)
 
         notificationProvider = NowPlayingNotification(this)
         setMediaNotificationProvider(notificationProvider!!)
