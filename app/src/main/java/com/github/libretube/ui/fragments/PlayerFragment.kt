@@ -249,7 +249,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
 
         override fun onPlaybackStateChanged(playbackState: Int) {
             // set the playback speed to one if having reached the end of a livestream
-            if (playbackState == Player.STATE_BUFFERING && streams.isLive &&
+            if (playbackState == Player.STATE_BUFFERING && ::streams.isInitialized && streams.isLive &&
                 playerController.duration - playerController.currentPosition < 700
             ) {
                 playerController.setPlaybackSpeed(1f)
