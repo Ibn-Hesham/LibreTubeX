@@ -138,7 +138,7 @@
     <string name="shareTo">Share URL to</string>
     <string name="normal_views">%1$s views%2$s</string>
     <string name="defaultIcon">Default</string>
-    <string name="classicIcon">LibreTube Classic</string>
+    <string name="classicIcon" translatable="false">LibreTube Classic</string>
     <string name="legacyIcon">Lost legacy</string>
     <string name="gradientIcon">Glib gradient</string>
     <string name="fireIcon">Fashionable fire</string>
