@@ -27,9 +27,13 @@ import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.databinding.FragmentPlaylistBinding
+<<<<<<< HEAD
 import com.github.libretube.db.DatabaseHolder.Database
 import com.github.libretube.db.obj.toPlaylistCacheItem
+=======
+>>>>>>> upstream/master
 import com.github.libretube.enums.PlaylistType
+import com.github.libretube.enums.menuoption.PlayListSortModeBottomSheetItem
 import com.github.libretube.extensions.TAG
 import com.github.libretube.extensions.ceilHalf
 import com.github.libretube.extensions.dpToPx
@@ -42,8 +46,11 @@ import com.github.libretube.helpers.NetworkHelper
 import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.parcelable.PlayerData
+<<<<<<< HEAD
 
 import com.github.libretube.repo.LocalUserDataRepository
+=======
+>>>>>>> upstream/master
 import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.adapters.PlaylistAdapter
 import com.github.libretube.ui.adapters.PlaylistItem
@@ -58,7 +65,6 @@ import com.github.libretube.util.TextUtils
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist) {
@@ -94,7 +100,8 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
             PreferenceHelper.putInt(PreferenceKeys.PLAYLIST_SORT_ORDER, value)
             field = value
         }
-    private val sortOptions by lazy { resources.getStringArray(R.array.playlistSortOptions) }
+    private val sortOptions = PlayListSortModeBottomSheetItem.entries
+
     private var recyclerViewState: Parcelable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -374,17 +381,18 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
                     binding.sortBTN.isVisible = true
                     binding.sortBTN.setOnClickListener {
                         BaseBottomSheet().apply {
-                            setSimpleItems(sortOptions.toList()) { index ->
+                            setItems(sortOptions) { index ->
                                 selectedSortOrder = index
-                                binding.sortBTN.text = sortOptions[index]
+                                binding.sortBTN.text =
+                                    sortOptions[index].title.getText(requireContext())
                                 showPlaylistVideos()
                             }
                         }.show(childFragmentManager)
                     }
                 }
 
-                binding.sortBTN.text = sortOptions[selectedSortOrder]
-
+                binding.sortBTN.text =
+                    sortOptions[selectedSortOrder].title.getText(requireContext())
             }
 
             // don't try to update the bookmark or the cache when showing the cached
