@@ -67,4 +67,9 @@ sealed class PlayListBottomSheetItem(
         titleStringRes = R.string.deletePlaylist,
         drawableRes = R.drawable.ic_delete,
     )
+
+    data object Reorder : PlayListBottomSheetItem(
+        titleStringRes = R.string.reorder_playlist,
+        drawableRes = R.drawable.ic_drag,
+    )
 }

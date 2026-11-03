@@ -27,11 +27,8 @@ import com.github.libretube.api.obj.StreamItem
 import com.github.libretube.constants.IntentData
 import com.github.libretube.constants.PreferenceKeys
 import com.github.libretube.databinding.FragmentPlaylistBinding
-<<<<<<< HEAD
 import com.github.libretube.db.DatabaseHolder.Database
 import com.github.libretube.db.obj.toPlaylistCacheItem
-=======
->>>>>>> upstream/master
 import com.github.libretube.enums.PlaylistType
 import com.github.libretube.enums.menuoption.PlayListSortModeBottomSheetItem
 import com.github.libretube.extensions.TAG
@@ -46,11 +43,7 @@ import com.github.libretube.helpers.NetworkHelper
 import com.github.libretube.helpers.PlaylistCacheHelper
 import com.github.libretube.helpers.PreferenceHelper
 import com.github.libretube.parcelable.PlayerData
-<<<<<<< HEAD
-
 import com.github.libretube.repo.LocalUserDataRepository
-=======
->>>>>>> upstream/master
 import com.github.libretube.repo.UserDataRepositoryHelper
 import com.github.libretube.ui.adapters.PlaylistAdapter
 import com.github.libretube.ui.adapters.PlaylistItem
@@ -563,7 +556,8 @@ class PlaylistFragment : DynamicLayoutManagerFragment(R.layout.fragment_playlist
         // reordering applies to the natural playlist order, not to a sorted or filtered view
         if (selectedSortOrder != 0) {
             selectedSortOrder = 0
-            binding.sortBTN.text = sortOptions[selectedSortOrder]
+            binding.sortBTN.text =
+                sortOptions[selectedSortOrder].title.getText(requireContext())
         }
         playlistViewModel.setQuery(null)
         binding.sortBTN.isGone = true

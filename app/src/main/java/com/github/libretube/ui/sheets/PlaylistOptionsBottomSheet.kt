@@ -64,21 +64,14 @@ class PlaylistOptionsBottomSheet : BaseBottomSheet() {
                 )
             }
         } else {
-<<<<<<< HEAD
-            optionsList.add(R.string.export_playlist)
-            optionsList.add(R.string.renamePlaylist)
-            optionsList.add(R.string.change_playlist_description)
-            // the videos of local playlists can be reordered by dragging them around
-            if (UserDataRepositoryHelper.userDataRepository is LocalUserDataRepository) {
-                optionsList.add(R.string.reorder_playlist)
-            }
-            optionsList.add(R.string.deletePlaylist)
-=======
             optionsList.add(PlayListBottomSheetItem.Export)
             optionsList.add(PlayListBottomSheetItem.Rename)
             optionsList.add(PlayListBottomSheetItem.ChangeDescription)
+            // the videos of local playlists can be reordered by dragging them around
+            if (UserDataRepositoryHelper.userDataRepository is LocalUserDataRepository) {
+                optionsList.add(PlayListBottomSheetItem.Reorder)
+            }
             optionsList.add(PlayListBottomSheetItem.Delete)
->>>>>>> upstream/master
         }
 
         return optionsList
@@ -164,18 +157,14 @@ class PlaylistOptionsBottomSheet : BaseBottomSheet() {
                 newPlaylistDescriptionDialog.show(mFragmentManager, null)
             }
 
-<<<<<<< HEAD
-            R.string.reorder_playlist -> {
+            PlayListBottomSheetItem.Reorder -> {
                 setFragmentResult(
                     PLAYLIST_OPTIONS_REQUEST_KEY,
                     bundleOf(IntentData.playlistReorder to true)
                 )
             }
 
-            R.string.download -> {
-=======
             PlayListBottomSheetItem.Download -> {
->>>>>>> upstream/master
                 DownloadHelper.startDownloadPlaylistDialog(
                     requireContext(),
                     mFragmentManager,

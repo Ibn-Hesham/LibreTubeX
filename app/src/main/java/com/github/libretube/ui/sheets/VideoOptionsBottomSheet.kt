@@ -152,7 +152,7 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
                 )
             }
 
-            R.string.dismiss -> {
+            VideoBottomSheetItem.Dismiss -> {
                 // the fragment owning the section persists the dismissal and removes
                 // the video from its list
                 val section = dismissableSection ?: return
@@ -178,16 +178,10 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
         setTitle(streamItem.title)
 
         var optionsList = buildList {
-<<<<<<< HEAD
-            add(R.string.addToPlaylist)
-            if (!streamItem.isLive) add(R.string.download)
-            add(R.string.share)
-            if (dismissableSection != null) add(R.string.dismiss)
-=======
             add(VideoBottomSheetItem.AddToPlaylist)
             if (!streamItem.isLive) add(VideoBottomSheetItem.Download)
             add(VideoBottomSheetItem.Share)
->>>>>>> upstream/master
+            if (dismissableSection != null) add(VideoBottomSheetItem.Dismiss)
         }
 
         setItems(optionsList) { which ->

@@ -52,4 +52,9 @@ sealed class VideoBottomSheetItem(
         titleStringRes = R.string.share,
         drawableRes = R.drawable.ic_share,
     )
+
+    data object Dismiss : VideoBottomSheetItem(
+        titleStringRes = R.string.dismiss,
+        drawableRes = R.drawable.ic_remove,
+    )
 }
