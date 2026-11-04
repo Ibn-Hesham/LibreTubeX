@@ -825,9 +825,14 @@ object PlayerHelper {
         return videoStats
     }
 
+    /**
+     * Get the play/pause action icon based on whether the player wants to play,
+     * instead of whether it's currently playing, so that the icon doesn't flicker
+     * on buffering state changes, e.g. while seeking.
+     */
     fun getPlayPauseActionIcon(player: Player) = when {
-        player.isPlaying -> R.drawable.ic_pause
         player.playbackState == Player.STATE_ENDED -> R.drawable.ic_restart
+        player.playWhenReady -> R.drawable.ic_pause
         else -> R.drawable.ic_play
     }
 
