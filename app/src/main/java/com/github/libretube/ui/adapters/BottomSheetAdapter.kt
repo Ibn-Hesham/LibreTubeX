@@ -29,7 +29,7 @@ class BottomSheetAdapter(
     override fun onBindViewHolder(holder: BottomSheetViewHolder, position: Int) {
         val item = getItem(position)!!
         holder.binding.root.apply {
-            val current = item.getCurrent()
+            val current = item.getCurrent()?.getText(context)
             val title = item.title.getText(context)
             text = if (current != null) "$title ($current)" else title
             isSelected = item.isSelected
