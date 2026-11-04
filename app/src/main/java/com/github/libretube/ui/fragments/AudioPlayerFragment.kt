@@ -80,6 +80,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
     private var transitionEndId = 0
 
     private var handler = Handler(Looper.getMainLooper())
+    private val seekBarUpdateRunnable = Runnable { updateSeekBar() }
     private var isPaused = !PlayerHelper.playAutomatically
 
     // the player volume to restore after continuously seeking muted
@@ -174,6 +175,11 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
         // is muted once the repeated seeking starts and unmuted on release
         binding.rewindBTN.setOnTouchListener(continuousSeekListener(-1))
         binding.forwardBTN.setOnTouchListener(continuousSeekListener(1))
+
+        // seek to the selected position when the user moves the time bar
+        binding.timeBar.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) playerController?.seekTo(value.toLong() * 1000)
+        }
 
         childFragmentManager.setFragmentResultListener(
             PlayingQueueSheet.PLAYING_QUEUE_REQUEST_KEY,
@@ -380,7 +386,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
 
         metadata.artworkUri?.let { updateThumbnailAsync(it) }
 
-        initializeSeekBar()
+        updateSeekBar()
     }
 
     private fun updateThumbnailAsync(thumbnailUri: Uri) {
@@ -410,13 +416,6 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
         }
     }
 
-    private fun initializeSeekBar() {
-        binding.timeBar.addOnChangeListener { _, value, fromUser ->
-            if (fromUser) playerController?.seekTo(value.toLong() * 1000)
-        }
-        updateSeekBar()
-    }
-
     /**
      * Update the position, duration and text views belonging to the seek bar
      */
@@ -427,7 +426,7 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
             binding.timeBar.value = 0f
             binding.duration.text = ""
             binding.currentPosition.text = ""
-            handler.postDelayed(this::updateSeekBar, 100)
+            scheduleSeekBarUpdate(100)
             return
         }
         val currentPosition = playerController?.currentPosition?.toFloat() ?: 0f
@@ -446,7 +445,17 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
             binding.timeBar.valueTo
         )
 
-        handler.postDelayed(this::updateSeekBar, 200)
+        // update the position at 100ms, so that faster seeking stays readable
+        scheduleSeekBarUpdate(100)
+    }
+
+    /**
+     * Schedule the next seek bar update, replacing a still pending one, so that
+     * repeated calls never start multiple parallel update loops.
+     */
+    private fun scheduleSeekBarUpdate(delayMillis: Long) {
+        handler.removeCallbacks(seekBarUpdateRunnable)
+        handler.postDelayed(seekBarUpdateRunnable, delayMillis)
     }
 
     private fun updatePlayPauseButton() {
@@ -488,11 +497,12 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
             }
 
         updatePlayPauseButton()
-        initializeSeekBar()
+        updateSeekBar()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        handler.removeCallbacks(seekBarUpdateRunnable)
         _binding = null
     }
 
