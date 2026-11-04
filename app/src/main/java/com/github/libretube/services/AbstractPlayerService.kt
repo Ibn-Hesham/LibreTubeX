@@ -90,16 +90,23 @@ abstract class AbstractPlayerService : MediaLibraryService(), MediaLibrarySessio
     protected var shouldHandleAutoplay = true
 
     private val playerListener = object : Player.Listener {
-        override fun onIsPlayingChanged(isPlaying: Boolean) {
-            super.onIsPlayingChanged(isPlaying)
+        override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+            super.onPlayWhenReadyChanged(playWhenReady, reason)
 
-            // Start or pause watch position timer
-            if (!isPlaying) {
+            // save the watch position when the playback gets paused. Listening to
+            // this instead of onIsPlayingChanged avoids saving the position
+            // repeatedly while buffering, as buffering changes whether the player
+            // is playing, but not whether it wants to play.
+            if (!playWhenReady) {
                 saveWatchPosition()
             }
         }
 
         override fun onPlayerError(error: PlaybackException) {
+            // the player keeps its position after an error and playback won't resume
+            // without user interaction, so the watch position can be saved already
+            saveWatchPosition()
+
             // show a toast on errors
             toastFromMainThread(error.localizedMessage.orEmpty())
         }
