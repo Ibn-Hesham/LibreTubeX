@@ -52,6 +52,7 @@ import com.github.libretube.ui.extensions.getSystemInsets
 import com.github.libretube.ui.extensions.setOnBackPressed
 import com.github.libretube.ui.interfaces.AudioPlayerOptions
 import com.github.libretube.ui.listeners.AudioPlayerThumbnailListener
+import com.github.libretube.ui.listeners.ContinuousSeekListener
 import com.github.libretube.ui.models.ChaptersViewModel
 import com.github.libretube.ui.models.CommonPlayerViewModel
 import com.github.libretube.ui.sheets.ChaptersBottomSheet
@@ -80,6 +81,13 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
 
     private var handler = Handler(Looper.getMainLooper())
     private var isPaused = !PlayerHelper.playAutomatically
+
+    // the player volume to restore after continuously seeking muted
+    private var volumeBeforeSeekMute = 1f
+
+    // number of seek buttons currently being held down, the volume only gets restored
+    // again after the last one got released
+    private var seekHoldCount = 0
 
     var isOffline: Boolean = false
         private set
@@ -153,12 +161,31 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
             playerController?.navigateVideo(PlayingQueue.getNext() ?: return@setOnClickListener)
         }
 
+        // the click listeners are only used by accessibility services, as the touch
+        // events are consumed by the continuous seek listeners
         binding.rewindBTN.setOnClickListener {
             playerController?.seekBy(-PlayerHelper.seekIncrement)
         }
         binding.forwardBTN.setOnClickListener {
             playerController?.seekBy(PlayerHelper.seekIncrement)
         }
+
+        // keep seeking while the rewind/forward buttons are pressed and held, the audio
+        // is muted once the repeated seeking starts and unmuted on release
+        binding.rewindBTN.setOnTouchListener(
+            ContinuousSeekListener(
+                onSeek = { playerController?.seekBy(-PlayerHelper.seekIncrement) },
+                onHoldStart = ::muteForContinuousSeek,
+                onHoldEnd = ::restorePlayerVolume
+            )
+        )
+        binding.forwardBTN.setOnTouchListener(
+            ContinuousSeekListener(
+                onSeek = { playerController?.seekBy(PlayerHelper.seekIncrement) },
+                onHoldStart = ::muteForContinuousSeek,
+                onHoldEnd = ::restorePlayerVolume
+            )
+        )
 
         childFragmentManager.setFragmentResultListener(
             PlayingQueueSheet.PLAYING_QUEUE_REQUEST_KEY,
@@ -286,6 +313,12 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
     }
 
     private fun killFragment(stopPlayer: Boolean) {
+        // restore the volume in case the fragment gets destroyed while a seek button is held
+        if (seekHoldCount > 0) {
+            playerController?.volume = volumeBeforeSeekMute
+            seekHoldCount = 0
+        }
+
         viewModel.isMiniPlayerVisible.value = false
 
         if (stopPlayer) playerController?.sendCustomCommand(
@@ -524,6 +557,29 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
         audioHelper.deviceVolume = bar.progress.toFloat() / bar.max
 
         binding.volumeTextView.text = "${bar.progress.normalize(0, bar.max, 0, 100)}"
+    }
+
+    /**
+     * Mute the player for the time of continuously seeking, so that no seek
+     * artifacts are audible, and remember the previous volume for restoration.
+     */
+    private fun muteForContinuousSeek() {
+        val controller = playerController ?: return
+
+        // only snapshot the volume for the first hold, so that overlapping holds
+        // on both buttons don't restore the already muted volume
+        if (seekHoldCount++ == 0) {
+            volumeBeforeSeekMute = controller.volume
+        }
+        controller.volume = 0f
+    }
+
+    private fun restorePlayerVolume() {
+        if (seekHoldCount == 0) return
+
+        if (--seekHoldCount == 0) {
+            playerController?.volume = volumeBeforeSeekMute
+        }
     }
 
     private fun updateChapterIndex() {
