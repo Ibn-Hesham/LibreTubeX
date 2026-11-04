@@ -177,35 +177,34 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
 
         setTitle(streamItem.title)
 
-        var optionsList = buildList {
-            add(VideoBottomSheetItem.AddToPlaylist)
-            if (!streamItem.isLive) add(VideoBottomSheetItem.Download)
-            add(VideoBottomSheetItem.Share)
-            if (dismissableSection != null) add(VideoBottomSheetItem.Dismiss)
-        }
+        // build the complete options list first, so that the sheet's list never
+        // gets replaced with a reordered one while it is already shown
+        lifecycleScope.launch {
+            // these options are only available for other videos than the currently playing one
+            val addedOptions = if (PlayingQueue.getCurrent()?.url?.toID() != videoId) {
+                getOptionsForNotActivePlayback(videoId)
+            } else {
+                emptyList()
+            }
 
-        setItems(optionsList) { which ->
-            onOptionSelect(optionsList[which], videoId, playlistId)
-        }
+            val optionsList = addedOptions + buildList {
+                add(VideoBottomSheetItem.AddToPlaylist)
+                if (!streamItem.isLive) add(VideoBottomSheetItem.Download)
+                add(VideoBottomSheetItem.Share)
+                if (dismissableSection != null) add(VideoBottomSheetItem.Dismiss)
+            }
 
-        // these options are only available for other videos than the currently playing one
-        if (PlayingQueue.getCurrent()?.url?.toID() != videoId) {
-            getOptionsForNotActivePlayback(videoId) { addedOptions ->
-                optionsList = addedOptions + optionsList
-
-                setItems(optionsList) { which ->
-                    onOptionSelect(optionsList[which], videoId, playlistId)
-                }
+            setItems(optionsList) { which ->
+                onOptionSelect(optionsList[which], videoId, playlistId)
             }
         }
 
         super.onCreate(savedInstanceState)
     }
 
-    private fun getOptionsForNotActivePlayback(
-        videoId: String,
-        onOptionsList: (List<VideoBottomSheetItem>) -> Unit
-    ) {
+    private suspend fun getOptionsForNotActivePlayback(
+        videoId: String
+    ): List<VideoBottomSheetItem> {
         // List that stores the different menu options. In the future could be add more options here.
         val optionsList: MutableList<VideoBottomSheetItem> =
             mutableListOf(VideoBottomSheetItem.PlayOnBackground)
@@ -217,27 +216,23 @@ class VideoOptionsBottomSheet : BaseBottomSheet() {
         }
 
         if (!PlayerHelper.watchPositionsAny && !PlayerHelper.watchHistoryEnabled) {
-            onOptionsList(optionsList)
-            return
+            return optionsList
         }
 
         // show the mark as watched or unwatched option if watch positions are enabled
-        lifecycleScope.launch(Dispatchers.IO) {
-            val watchHistoryEntry =
-                UserDataRepositoryHelper.userDataRepository.getFromWatchHistory(videoId)
-
-            if (watchHistoryEntry != null) {
-                optionsList += VideoBottomSheetItem.MarkAsUnwatched
-            }
-
-            if (watchHistoryEntry?.metadata?.finished != true) {
-                optionsList += VideoBottomSheetItem.MarkAsWatched
-            }
-
-            withContext(Dispatchers.Main) {
-                onOptionsList(optionsList)
-            }
+        val watchHistoryEntry = withContext(Dispatchers.IO) {
+            UserDataRepositoryHelper.userDataRepository.getFromWatchHistory(videoId)
         }
+
+        if (watchHistoryEntry != null) {
+            optionsList += VideoBottomSheetItem.MarkAsUnwatched
+        }
+
+        if (watchHistoryEntry?.metadata?.finished != true) {
+            optionsList += VideoBottomSheetItem.MarkAsWatched
+        }
+
+        return optionsList
     }
 
     companion object {
