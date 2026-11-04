@@ -488,6 +488,12 @@ class AudioPlayerFragment : Fragment(R.layout.fragment_audio_player), AudioPlaye
                 isPaused = !isPlaying
             }
 
+            override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                super.onPlayWhenReadyChanged(playWhenReady, reason)
+
+                updatePlayPauseButton()
+            }
+
             override fun onMediaMetadataChanged(mediaMetadata: MediaMetadata) {
                 super.onMediaMetadataChanged(mediaMetadata)
 
