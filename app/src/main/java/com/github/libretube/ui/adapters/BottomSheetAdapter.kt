@@ -3,6 +3,7 @@ package com.github.libretube.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.github.libretube.databinding.BottomSheetItemBinding
 import com.github.libretube.obj.bottomsheetitem.BottomSheetItem
 import com.github.libretube.ui.adapters.callbacks.DiffUtilItemCallback
@@ -10,7 +11,9 @@ import com.github.libretube.ui.extensions.setDrawables
 import com.github.libretube.ui.viewholders.BottomSheetViewHolder
 
 class BottomSheetAdapter(
-    private val listener: (index: Int) -> Unit
+    // mutable so that BaseBottomSheet can replace the listener when setItems
+    // is called again while the sheet is already visible
+    internal var listener: (index: Int) -> Unit
 ) : ListAdapter<BottomSheetItem, BottomSheetViewHolder>(
     DiffUtilItemCallback()
 ) {
@@ -34,7 +37,11 @@ class BottomSheetAdapter(
 
             setOnClickListener {
                 item.onClick.invoke()
-                listener.invoke(position)
+                // resolve the index at click time: the bind-time position goes
+                // stale when a later submitList shifts this row, e.g. when
+                // options get prepended while the sheet is already shown
+                val index = holder.bindingAdapterPosition
+                if (index != RecyclerView.NO_POSITION) listener.invoke(index)
             }
         }
     }

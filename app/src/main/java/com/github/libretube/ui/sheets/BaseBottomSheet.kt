@@ -21,8 +21,9 @@ import kotlinx.coroutines.launch
 open class BaseBottomSheet(@LayoutRes layoutResId: Int = R.layout.bottom_sheet) : ExpandedBottomSheet(layoutResId) {
 
     private var title: String? = null
-    private lateinit var items: List<BottomSheetItem>
-    private lateinit var listener: (index: Int) -> Unit
+    // defaults so that the sheet can be shown before setItems was called
+    private var items: List<BottomSheetItem> = emptyList()
+    private var listener: (index: Int) -> Unit = {}
 
     private lateinit var adapter: BottomSheetAdapter
 
@@ -65,10 +66,6 @@ open class BaseBottomSheet(@LayoutRes layoutResId: Int = R.layout.bottom_sheet) 
         listener: (suspend (index: Int) -> Unit)?
     ) = apply {
         this.items = items
-
-        // if the caller calls `setItems` while the sheet is already visible, update the existing list
-        if (::adapter.isInitialized) adapter.submitList(items)
-
         this.listener = { index ->
             lifecycleScope.launch {
                 dialog?.hide()
@@ -77,6 +74,13 @@ open class BaseBottomSheet(@LayoutRes layoutResId: Int = R.layout.bottom_sheet) 
                     if (autoDismiss) dismiss()
                 }
             }
+        }
+
+        // if the caller calls `setItems` while the sheet is already visible,
+        // update the existing list and hand the adapter the new listener
+        if (::adapter.isInitialized) {
+            adapter.listener = this.listener
+            adapter.submitList(items)
         }
     }
 
