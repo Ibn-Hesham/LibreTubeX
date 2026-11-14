@@ -304,13 +304,8 @@
     <string name="shuffle">Amestecare</string>
     <string name="add_to_bookmarks">Adaugă la marcaje</string>
     <string name="forward">Înainte</string>
-<<<<<<< HEAD
-    <string name="audio_only_mode">Modul numai audio</string>
-    <string name="audio_only_mode_summary">Transformă LibreTubeX într-un player audio</string>
-=======
     <string name="audio_only_mode">Mod numai audio</string>
-    <string name="audio_only_mode_summary">Transformă LibreTube într-un player muzical</string>
->>>>>>> MERGE_HEAD
+    <string name="audio_only_mode_summary">Transformă LibreTubeX într-un player muzical</string>
     <string name="help">Ajutor</string>
     <string name="faq">Întrebări frecvente</string>
     <string name="mark_as_watched">Marchează ca vizionat</string>
