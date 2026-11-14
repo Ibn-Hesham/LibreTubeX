@@ -58,6 +58,7 @@ fun MediaItem.Builder.setMetadata(downloadWithItems: DownloadWithItems) = apply 
             .setArtist(download.uploader)
             .setDurationMs(download.duration?.times(1000))
             .setArtworkUri(download.thumbnailPath?.toAndroidUri())
+            .setComposer(download.uploaderUrl?.toID())
             .setExtras(extras)
             // send a unique timestamp to notify that the metadata changed, even if playing the same video twice
             .setTrackNumber(System.currentTimeMillis().mod(Int.MAX_VALUE))

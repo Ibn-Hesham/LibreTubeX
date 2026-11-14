@@ -37,6 +37,10 @@ object NavigationHelper {
                 binding.playerMotionLayout.transitionToEnd()
                 true
             }
+            activity.runOnAudioPlayerFragment {
+                binding.playerMotionLayout.transitionToEnd()
+                true
+            }
             activity.minimizePlayerContainerLayout()
         } catch (e: Exception) {
             e.printStackTrace()
