@@ -45,7 +45,12 @@ jobs:
             printf 'keyPassword=%s\n' "${KEY_PASSWORD//\\/\\\\}"
           } > keystore.properties
 
+      # the milestone release is marked as latest, so its versionCode must be
+      # above the per-build releases from ci.yml (72 + run_number); otherwise
+      # Android refuses to install it over them as a downgrade
       - name: Build APK
+        env:
+          VERSION_CODE: "100000"
         run: ./gradlew assembleRelease --no-daemon
 
       - name: Create changelog
