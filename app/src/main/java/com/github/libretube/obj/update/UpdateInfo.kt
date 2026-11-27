@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 @Parcelize
 data class UpdateInfo(
     val name: String,
+    @SerialName("tag_name") val tagName: String,
     val body: String,
     @SerialName("html_url") val htmlUrl: String
 ) : Parcelable
