@@ -10,7 +10,6 @@ import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.media.session.PlaybackState
 import android.os.Bundle
 import android.os.Handler
@@ -46,11 +45,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.C
-import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
+import androidx.media3.session.SessionCommand
+import androidx.media3.session.SessionResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.libretube.R
 import com.github.libretube.api.JsonHelper
@@ -59,6 +59,7 @@ import com.github.libretube.api.obj.Segment
 import com.github.libretube.api.obj.Streams
 import com.github.libretube.compat.PictureInPictureCompat
 import com.github.libretube.compat.PictureInPictureParamsCompat
+import com.github.libretube.constants.CustomPlaybackException
 import com.github.libretube.constants.IntentData
 import com.github.libretube.databinding.FragmentPlayerBinding
 import com.github.libretube.db.DatabaseHolder
@@ -111,6 +112,7 @@ import com.github.libretube.util.PlayingQueue
 import com.github.libretube.util.TextUtils
 import com.github.libretube.util.TextUtils.toTimeInSeconds
 import com.google.android.material.snackbar.Snackbar
+import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -330,25 +332,36 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
             viewModel.segments.postValue(segments.orEmpty())
         }
 
-        /**
-         * Catch player errors to prevent the app from stopping
-         */
         override fun onPlayerError(error: PlaybackException) {
             super.onPlayerError(error)
-            try {
-                playerController.play()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            disableController()
+            with (playerBackgroundBinding.errorNoticeLayout) {
+                root.isVisible = true
+                error.message?.also {
+                    errorNoticeMessageText.text = it
+                }
+                errorNoticeRetryButton.isVisible =
+                    error.errorCode != CustomPlaybackException.ERROR_CONTENT_NOT_AVAILABLE
             }
         }
+    }
 
-        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
-            super.onMediaItemTransition(mediaItem, reason)
-            if (mediaItem == null) {
-                toggleVideoInfoVisibility(false)
-                disableController()
-                binding.titleTextView.text = ""
+    private val mediaControllerListener = object: MediaController.Listener {
+        override fun onCustomCommand(
+            controller: MediaController,
+            command: SessionCommand,
+            args: Bundle
+        ): ListenableFuture<SessionResult> {
+            when (command.customAction) {
+                AbstractPlayerService.ON_NAVIGATE_VIDEO_ACTION_CALLBACK -> {
+                    playerBackgroundBinding.errorNoticeLayout.root.isGone = true
+                    playerBackgroundBinding.errorNoticeLayout.errorNoticeMessageText.text = ""
+                    toggleVideoInfoVisibility(false)
+                    disableController()
+                    binding.titleTextView.text = ""
+                }
             }
+            return super.onCustomCommand(controller, command, args)
         }
     }
 
@@ -552,6 +565,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
             requireContext(),
             serviceClass,
             if (startNewSession) args else Bundle.EMPTY,
+            mediaControllerListener
         ) {
             if (_binding == null) {
                 playerController.sendCustomCommand(
@@ -566,6 +580,12 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
             playerController.addListener(playerListener)
             connectToPlayerView(playerController)
             updatePlayPauseButton()
+            playerBackgroundBinding.errorNoticeLayout.errorNoticeRetryButton.setOnClickListener {
+                playerController.sendCustomCommand(
+                    AbstractPlayerService.reloadVideoActionCommand,
+                    Bundle.EMPTY
+                )
+            }
 
             if (!startNewSession) {
                 // JSON-encode as work-around for https://github.com/androidx/media/issues/564
@@ -617,7 +637,13 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
                     commonPlayerViewModel.isMiniPlayerVisible.value = false
                     // re-enable captions
                     binding.player.updateCurrentSubtitle(viewModel.currentCaptionId)
-                    binding.player.useController = true
+                    if (!playerBackgroundBinding.errorNoticeLayout.root.isVisible) {
+                        binding.player.useController = true
+                    }
+                    playerBackgroundBinding.errorNoticeLayout.errorNoticeMessageText
+                        .isVisible = true
+                    playerBackgroundBinding.errorNoticeLayout.errorNoticeRetryButton
+                        .isVisible = true
                     commonPlayerViewModel.setSheetExpand(true)
                     baseActivity.setPlayerContainerProgress(0f)
                     changeOrientationMode()
@@ -631,6 +657,8 @@ class PlayerFragment : Fragment(R.layout.fragment_player), CustomPlayerCallback 
                     disableController()
                     commonPlayerViewModel.setSheetExpand(null)
                     playerBackgroundBinding.sbSkipBtn.isGone = true
+                    playerBackgroundBinding.errorNoticeLayout.errorNoticeMessageText.isGone = true
+                    playerBackgroundBinding.errorNoticeLayout.errorNoticeRetryButton.isGone = true
 
                     baseActivity.setPlayerContainerProgress(1f)
                     baseActivity.requestOrientationChange()
